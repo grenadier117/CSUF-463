@@ -1,7 +1,7 @@
 import { AppBar, Grid, Toolbar, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { globalSliceKey, globalReducer } from 'app/global/global.redux';
-import { GlobalDisplay } from 'app/global/GlobalDisplay';
+import { GlobalDisplay } from 'app/global/globalDisplay';
 import { Route } from 'react-router-dom';
 import { useInjectReducer } from 'utils/redux-injectors';
 
