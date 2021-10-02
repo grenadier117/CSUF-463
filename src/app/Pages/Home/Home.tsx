@@ -1,7 +1,5 @@
 import { Grid, Paper } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { globalSliceKey, globalReducer } from 'app/global/global.redux';
-import { useInjectReducer } from 'utils/redux-injectors';
 
 const useStyles = makeStyles({
   paper: {
@@ -13,11 +11,10 @@ const useStyles = makeStyles({
 
 export const Home = () => {
   const classes = useStyles();
-  useInjectReducer({ key: globalSliceKey, reducer: globalReducer });
   return (
     <Grid container>
       <Grid item xs={12}>
-        <Paper className={classes.paper}>Placeholder</Paper>
+        <Paper className={classes.paper}>463 React Group Placeholder</Paper>
       </Grid>
     </Grid>
   );
