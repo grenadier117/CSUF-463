@@ -13,5 +13,16 @@ export const theme = createTheme({
       paper: '#404040',
       default: '#FF0000',
     },
+    action: {
+      active: '#FFF',
+    },
+  },
+  typography: {
+    body1: {
+      fontSize: '14px',
+    },
+    body2: {
+      fontSize: '12px',
+    },
   },
 });

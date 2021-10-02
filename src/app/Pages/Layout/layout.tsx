@@ -1,11 +1,9 @@
-import { AppBar, Button, Grid, IconButton, Toolbar, Typography } from '@mui/material';
+import { AppBar, Grid, Toolbar, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { globalSliceKey, globalReducer } from 'app/global/global.redux';
 import { GlobalDisplay } from 'app/global/GlobalDisplay';
-import React from 'react';
 import { Route } from 'react-router-dom';
 import { useInjectReducer } from 'utils/redux-injectors';
-import MenuIcon from '@mui/icons-material/Menu';
 
 const useStyles = makeStyles({
   root: {

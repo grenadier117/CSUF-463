@@ -1,3 +1,4 @@
+import { AlertColor } from '@mui/material';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface IGlobal {
@@ -9,7 +10,7 @@ export interface IGlobal {
 
 export interface ISnackBar {
   message?: string;
-  severity?: 'error' | 'success';
+  severity?: AlertColor;
 }
 
 export const defaultSnackbar: ISnackBar = {

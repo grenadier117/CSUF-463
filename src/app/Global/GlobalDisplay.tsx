@@ -28,18 +28,10 @@ export const GlobalDisplay = props => {
     <React.Fragment>
       {props.children}
       <SnackBar
-        snackOpen={open ?? false}
+        open={open ?? false}
         message={snackbar?.message ?? ''}
-        onSnackClose={onSnackBarClose}
-        iconImage={
-          snackbar?.severity === 'error' ? (
-            <ErrorOutlineIcon style={{ color: 'red' }} />
-          ) : snackbar?.severity === 'success' ? (
-            <CheckCircleOutlineIcon style={{ color: 'green' }} />
-          ) : (
-            <React.Fragment />
-          )
-        }
+        severity={snackbar.severity}
+        handleClose={onSnackBarClose}
       />
     </React.Fragment>
   );

@@ -1,10 +1,15 @@
 import { Grid, GridSize, Paper, Box } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import React from 'react';
 
 const useStyles = makeStyles({
   paper: {
-    padding: '50px',
+    minHeight: '100px',
+    width: '100%',
     textAlign: 'center',
+    '&.small': {
+      minHeight: '30px',
+    },
   },
   box: {
     margin: '40px',
@@ -12,6 +17,7 @@ const useStyles = makeStyles({
 });
 
 export const Home = () => {
+  const classes = useStyles();
   const gridGeneration = [
     [4, 3, 5],
     [5, 4, 3],
@@ -23,8 +29,6 @@ export const Home = () => {
     [3, 2, 7],
     [2, 8, 2],
   ];
-
-  const classes = useStyles();
 
   return (
     <Box className={classes.box}>
@@ -41,7 +45,7 @@ export const Home = () => {
             <Grid container spacing={4}>
               {[1, 2, 3, 4, 5, 6].map((item, index) => (
                 <Grid xs={2} item key={index}>
-                  <Paper className={classes.paper} />
+                  <Paper className={classes.paper}>..</Paper>
                 </Grid>
               ))}
             </Grid>
@@ -49,16 +53,12 @@ export const Home = () => {
           <Grid item xs={12}>
             <Grid container spacing={1} direction="column">
               {gridGeneration.map((item, index) => (
-                <Grid key={index} item>
-                  <Grid container spacing={1}>
-                    {item.map(item2 => (
-                      <Grid key={item2} item xs={item2 as GridSize}>
-                        <Paper className={classes.paper} style={{ padding: '0px' }}>
-                          ..
-                        </Paper>
-                      </Grid>
-                    ))}
-                  </Grid>
+                <Grid key={index} item container spacing={1}>
+                  {item.map(item2 => (
+                    <Grid key={item2} item xs={item2 as GridSize}>
+                      <Paper className={`${classes.paper} small`}>..</Paper>
+                    </Grid>
+                  ))}
                 </Grid>
               ))}
             </Grid>

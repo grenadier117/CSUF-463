@@ -1,103 +1,93 @@
-import { Icon, Snackbar, SnackbarOrigin } from '@mui/material';
-import React, { useEffect } from 'react';
-interface SnackbarState extends SnackbarOrigin {
-  snackOpen: boolean;
-}
+import { Button, IconButton, Slide, SlideProps, Snackbar, SnackbarOrigin, Typography, AlertColor } from '@mui/material';
+import MuiAlert, { AlertProps } from '@mui/material/Alert';
+import { makeStyles, withStyles } from '@mui/styles';
+import clsx from 'clsx';
+import React, { useEffect, useState } from 'react';
+import CloseIcon from '@mui/icons-material/Close';
 
 interface Props {
-  snackOpen: boolean;
+  open: boolean;
   message: string;
-  image?: string;
-  iconImage?: JSX.Element;
   autohideDuration?: number | null;
-  onSnackClose?: () => void;
-  vertical?: string;
-  horizontal?: string;
+  handleClose?: () => void;
   action?: JSX.Element;
-  disableIcon?: boolean;
+  severity?: AlertColor;
 }
 
-export const SnackBar = (props: Props) => {
-  const [snackbarState, setSnackbarState] = React.useState<SnackbarState>({
-    snackOpen: false,
-    vertical: 'bottom',
-    horizontal: 'center',
-  });
+const useStyles = makeStyles({
+  alert: {
+    alignItems: 'center !important',
+  },
+  action: {
+    padding: '0px 0px 0px 16px !important',
+  },
+});
 
-  const { snackOpen } = snackbarState;
-  const { autohideDuration = 3000, onSnackClose, disableIcon = false } = props;
+const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
+type TransitionProps = Omit<SlideProps, 'direction'>;
+
+function TransitionUp(props: TransitionProps) {
+  return <Slide {...props} direction="up" />;
+}
+
+const StyledIcon = withStyles({
+  root: {
+    height: '20px !important',
+    width: '20px !important',
+  },
+})(CloseIcon);
+
+export const SnackBar = ({
+  open,
+  message,
+  autohideDuration = 400000,
+  handleClose,
+  action,
+  severity = 'info',
+}: Props) => {
+  const classes = useStyles();
+  const [_open, _setOpen] = useState<boolean>(false);
+  const alignment: SnackbarOrigin = { vertical: 'bottom', horizontal: 'center' };
+
+  const _handleClose = (event?: React.SyntheticEvent, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    _setOpen(false);
+    handleClose?.();
+  };
 
   useEffect(() => {
-    setSnackbarState({ ...snackbarState, snackOpen: props.snackOpen });
-    if (props.horizontal) {
-      switch (props.horizontal) {
-        case 'left':
-          setSnackbarState({ ...snackbarState, horizontal: 'left' });
-          break;
-        case 'center':
-          setSnackbarState({ ...snackbarState, horizontal: 'center' });
-          break;
-        case 'right':
-          setSnackbarState({ ...snackbarState, horizontal: 'right' });
-          break;
-
-        default:
-          setSnackbarState({ ...snackbarState });
-      }
-    }
-    if (props.vertical) {
-      switch (props.vertical) {
-        case 'top':
-          setSnackbarState({ ...snackbarState, vertical: 'top' });
-          break;
-        case 'bottom':
-          setSnackbarState({ ...snackbarState, vertical: 'bottom' });
-          break;
-
-        default:
-          setSnackbarState({ ...snackbarState });
-      }
-    }
-  }, [props]);
-
-  const handleSnackClose = () => {
-    onSnackClose?.();
-    setSnackbarState({ ...snackbarState, snackOpen: false });
-  };
-
-  const IconSection = () => {
-    return props.iconImage ? (
-      props.iconImage
-    ) : (
-      <Icon data-testid="render-icon">
-        <img src={props.image} alt={props.message} />
-      </Icon>
-    );
-  };
-
-  const MessageSection = () => {
-    return (
-      <span style={{ paddingLeft: '12px' }} data-testid="render-message">
-        {props.message}
-      </span>
-    );
-  };
+    _setOpen(open);
+  }, [open]);
 
   return (
-    <div>
-      <Snackbar
-        data-testid="render-snackBar"
-        open={snackOpen}
-        onClose={handleSnackClose}
-        autoHideDuration={autohideDuration}
-        message={
-          <div>
-            {!disableIcon && <IconSection />}
-            <MessageSection />
-          </div>
+    <Snackbar
+      anchorOrigin={alignment}
+      open={_open}
+      autoHideDuration={autohideDuration}
+      onClose={_handleClose}
+      TransitionComponent={TransitionUp}
+    >
+      <Alert
+        action={
+          <IconButton>
+            <StyledIcon />
+          </IconButton>
         }
-        action={props.action}
-      />
-    </div>
+        classes={{
+          root: classes.alert,
+          action: classes.action,
+        }}
+        onClose={handleClose}
+        severity={severity}
+        sx={{ width: '100%' }}
+      >
+        <Typography variant="h5">{message}</Typography>
+      </Alert>
+    </Snackbar>
   );
 };
