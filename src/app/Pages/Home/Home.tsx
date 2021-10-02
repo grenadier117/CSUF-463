@@ -1,8 +1,7 @@
 import { Grid, Paper } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { globalSliceKey, globalReducer } from 'app/Global/global.redux';
+import { globalSliceKey, globalReducer } from 'app/global/global.redux';
 import { useInjectReducer } from 'utils/redux-injectors';
-import './Home.css';
 
 const useStyles = makeStyles({
   paper: {

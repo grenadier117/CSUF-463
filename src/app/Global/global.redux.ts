@@ -29,7 +29,7 @@ const globalSlice = createSlice({
   initialState: initialState,
   reducers: {
     /** Internal action to toggle the open snackbar */
-    closeSnackBar(state, action: PayloadAction) {
+    closeSnackBar(state) {
       return {
         ...state,
         snackbar: {
@@ -39,7 +39,7 @@ const globalSlice = createSlice({
       };
     },
     /** Internal action to remove the completed snackbar from the queue */
-    popSnackBar(state, action: PayloadAction) {
+    popSnackBar(state) {
       return {
         ...state,
         snackbar: {

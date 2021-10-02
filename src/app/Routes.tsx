@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { BrowserRouter, Switch } from 'react-router-dom';
-import { Home } from './Pages/Home/Home';
-import { Layout } from './Pages/Layout/layout';
+import { Home } from './pages/home/home';
+import { Layout } from './pages/layout/layout';
 
 export const Routes: React.FC = () => (
   <div>
