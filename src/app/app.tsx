@@ -9,8 +9,6 @@ import { StylesProvider } from '@mui/styles';
 
 export const store = configureAppStore();
 
-console.info('@JAKE - store', store);
-
 export const App = (): JSX.Element => {
   return (
     <StylesProvider injectFirst>
