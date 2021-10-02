@@ -1,8 +1,6 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useInjectReducer } from 'utils/redux-injectors';
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { globalSliceKey, globalReducer, globalActions } from './global.redux';
 import { SnackBar } from 'app/components/snackbar';
 import { selectSnackBar, selectSnackBarOpen } from './global.selectors';

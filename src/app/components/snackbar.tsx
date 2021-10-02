@@ -1,7 +1,6 @@
-import { Button, IconButton, Slide, SlideProps, Snackbar, SnackbarOrigin, Typography, AlertColor } from '@mui/material';
+import { IconButton, Slide, SlideProps, Snackbar, SnackbarOrigin, Typography, AlertColor } from '@mui/material';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import { makeStyles, withStyles } from '@mui/styles';
-import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 
@@ -74,9 +73,11 @@ export const SnackBar = ({
     >
       <Alert
         action={
-          <IconButton>
-            <StyledIcon />
-          </IconButton>
+          action || (
+            <IconButton>
+              <StyledIcon />
+            </IconButton>
+          )
         }
         classes={{
           root: classes.alert,
