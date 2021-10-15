@@ -39,6 +39,7 @@ export const RoomList = () => {
               <ListItem>
                 <ListItemText
                   primary={
+                    // Typograhy for displaying text. This compiles to a p tag in html
                     <Typography color="text" variant="h4">
                       {`Room ${room.roomId}`}
                     </Typography>
@@ -47,6 +48,7 @@ export const RoomList = () => {
                     reservation && (
                       <Grid container direction="column">
                         <Grid item>
+                          {/* Typograhy for displaying text. This compiles to a p tag in html */}
                           <Typography color="text" variant="h5">
                             {`Guest: ${reservation?.firstName} ${reservation?.lastName}`}
                           </Typography>
@@ -63,6 +65,7 @@ export const RoomList = () => {
                   }
                 />
               </ListItem>
+              {/* Add a divider between the list items */}
               {index !== rooms.length - 1 && <Divider />}
             </React.Fragment>
           );
