@@ -13,17 +13,6 @@ export const getDesignTokens = (mode: PaletteMode) => ({
             primary: grey[900],
             secondary: grey[800],
           },
-          typography: {
-            body1: {
-              fontSize: '14px',
-            },
-            body2: {
-              fontSize: '12px',
-            },
-            text: {
-              fontSize: '12px',
-            },
-          },
         }
       : {
           // palette values for dark mode
@@ -44,17 +33,14 @@ export const getDesignTokens = (mode: PaletteMode) => ({
             primary: '#fff',
             secondary: grey[500],
           },
-          typography: {
-            text: {
-              fontSize: '12px',
-            },
-            body1: {
-              fontSize: '14px',
-            },
-            body2: {
-              fontSize: '12px',
-            },
-          },
         }),
+    typography: {
+      body1: {
+        fontSize: '14px',
+      },
+      body2: {
+        fontSize: '12px',
+      },
+    },
   },
 });
