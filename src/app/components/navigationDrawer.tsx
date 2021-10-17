@@ -31,6 +31,20 @@ export const NavigationDrawer = ({ open, onClose }) => {
               </Typography>
             </Link>
           </MenuItem>
+          <MenuItem>
+            <Link href="/currentStay">
+              <Typography variant="h5" className={classes.link}>
+                {'Occupied Rooms'}
+              </Typography>
+            </Link>
+          </MenuItem>
+          <MenuItem>
+            <Link href="/guestInformation">
+              <Typography variant="h5" className={classes.link}>
+                {'Guest Information'}
+              </Typography>
+            </Link>
+          </MenuItem>
         </MenuList>
       </Drawer>
     </ClickAwayListener>

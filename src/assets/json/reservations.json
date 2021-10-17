@@ -1,9 +1,11 @@
 [
   {
-    "firstName": "Jake",
-    "lastName": "Hamo",
     "roomId": 1,
-    "fromDate": "2021/10/15",
-    "toDate": "2021/10/31"
+    "guestId": 1,
+    "checkIn": "10/11/2021",
+    "checkOut": "10/15/2021",
+    "active": true,
+    "payment": 100.0,
+    "balance": 0.0
   }
 ]

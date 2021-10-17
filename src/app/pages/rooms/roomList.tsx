@@ -44,25 +44,25 @@ export const RoomList = () => {
                       {`Room ${room.roomId}`}
                     </Typography>
                   }
-                  secondary={
-                    reservation && (
-                      <Grid container direction="column">
-                        <Grid item>
-                          {/* Typograhy for displaying text. This compiles to a p tag in html */}
-                          <Typography color="text" variant="h5">
-                            {`Guest: ${reservation?.firstName} ${reservation?.lastName}`}
-                          </Typography>
-                        </Grid>
-                        <Grid item>
-                          <Typography color="text" variant="h6">
-                            {`Stay: ${moment(reservation.fromDate).format('MM/DD/YYYY')} - ${moment(
-                              reservation.toDate,
-                            ).format('MM/DD/YYYY')}`}
-                          </Typography>
-                        </Grid>
-                      </Grid>
-                    )
-                  }
+                  // secondary={
+                  //   reservation && (
+                  //     <Grid container direction="column">
+                  //       <Grid item>
+                  //         {/* Typograhy for displaying text. This compiles to a p tag in html */}
+                  //         <Typography color="text" variant="h5">
+                  //           {`Guest: ${reservation?.firstName} ${reservation?.lastName}`}
+                  //         </Typography>
+                  //       </Grid>
+                  //       <Grid item>
+                  //         <Typography color="text" variant="h6">
+                  //           {`Stay: ${moment(reservation.fromDate).format('MM/DD/YYYY')} - ${moment(
+                  //             reservation.toDate,
+                  //           ).format('MM/DD/YYYY')}`}
+                  //         </Typography>
+                  //       </Grid>
+                  //     </Grid>
+                  //   )
+                  // }
                 />
               </ListItem>
               {/* Add a divider between the list items */}
