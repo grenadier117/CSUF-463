@@ -1,4 +1,4 @@
-export const rooms_list = [
+export const room_list = [
     {
         roomType: "K",
         roomNumber: 1,
@@ -21,9 +21,9 @@ export const rooms_list = [
         balance: 0.0,
         availability: true,
         maintainance: true,
-        checkin: null,
-        checkout: null,
-        guestID: null,
+        checkin: "none",
+        checkout: "none",
+        guestID: "none",
     },
     {
         roomType: "DBK",
@@ -60,9 +60,9 @@ export const rooms_list = [
         balance: 0.0,
         availability: true,
         maintainance: false,
-        checkin: null,
-        checkout: null,
-        guestID: null,
+        checkin: "none",
+        checkout: "none",
+        guestID: "none",
     },
     {
         roomType: "K",
@@ -73,9 +73,9 @@ export const rooms_list = [
         balance: 0.0,
         availability: true,
         maintainance: true,
-        checkin: null,
-        checkout: null,
-        guestID: null,
+        checkin: "none",
+        checkout: "none",
+        guestID: "none",
     },
     {
         roomType: "DBK",
@@ -86,8 +86,8 @@ export const rooms_list = [
         balance: 0.0,
         availability: false,
         maintainance: false,
-        checkin: null,
-        checkout: null,
-        guestID: null,
+        checkin: "none",
+        checkout: "none",
+        guestID: "none",
     },
 ]
