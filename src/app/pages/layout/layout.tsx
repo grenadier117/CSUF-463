@@ -21,6 +21,9 @@ const useStyles = makeStyles({
     width: '30px !important',
     marginRight: '20px',
   },
+  content: {
+    padding: '24px',
+  },
 });
 
 export const Layout = ({ Component, ...rest }) => {
@@ -57,7 +60,7 @@ export const Layout = ({ Component, ...rest }) => {
               <AppBar position="static">
                 <Toolbar>
                   <MenuIcon className={classes.menu} onClick={toggleMenu} />
-                  <Typography variant="h4" component="div" sx={{ flexGrow: 1 }}>
+                  <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
                     CS 463
                   </Typography>
                   <FormGroup>
@@ -69,7 +72,7 @@ export const Layout = ({ Component, ...rest }) => {
                 </Toolbar>
               </AppBar>
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={12} className={classes.content}>
               <Component {...matchProps} />
             </Grid>
           </Grid>

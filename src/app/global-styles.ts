@@ -10,14 +10,14 @@ export const getDesignTokens = (mode: PaletteMode) => ({
           primary: amber,
           divider: amber[200],
           text: {
-            primary: grey[900],
-            secondary: grey[800],
+            primary: '#000',
+            secondary: grey[500],
           },
         }
       : {
           // palette values for dark mode
           primary: {
-            main: '#1a1a1a',
+            main: '#FFFFFF',
           },
           secondary: {
             main: '#595959',
@@ -36,7 +36,7 @@ export const getDesignTokens = (mode: PaletteMode) => ({
         }),
     typography: {
       body1: {
-        fontSize: '14px',
+        fontSize: '12px',
       },
       body2: {
         fontSize: '12px',

@@ -2,3 +2,7 @@ html {
   overflow: hidden;
   width: 100%;
 }
+
+body {
+  margin: 0 auto;
+}

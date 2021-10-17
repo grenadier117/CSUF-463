@@ -20,7 +20,7 @@ export const NavigationDrawer = ({ open, onClose }) => {
           <MenuItem>
             <Link href="/">
               <Typography variant="h5" className={classes.link}>
-                {'Rooms'}
+                {'Next 7 Days'}
               </Typography>
             </Link>
           </MenuItem>
