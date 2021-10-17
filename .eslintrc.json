@@ -27,7 +27,8 @@
     "react/react-in-tsx-scope": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-explicit-any": "off",
-    "react/prop-types": "off"
+    "react/prop-types": "off",
+    "react/jsx-key": "off"
   },
   "overrides": [
     {
