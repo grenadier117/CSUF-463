@@ -115,7 +115,10 @@ export const CurrentStay = () => {
                         room.roomRate * daysBetweenDates(reservation.checkIn, reservation.checkOut)
                       }`}</TableCell>
                       <TableCell>{`$${reservation.payment}`}</TableCell>
-                      <TableCell>{`$${reservation.balance}`}</TableCell>
+                      <TableCell>{`$${
+                        room.roomRate * daysBetweenDates(reservation.checkIn, reservation.checkOut) -
+                        reservation.payment
+                      }`}</TableCell>
                     </TableRow>
                   );
                 })}
