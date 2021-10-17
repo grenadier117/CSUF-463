@@ -1,4 +1,4 @@
-import { Typography, Grid, Divider, Paper, Box, Table, TableRow, TableHead, TableCell } from '@mui/material';
+import { Typography, Divider, Grid, Paper, Box, Table, TableRow, TableHead, TableCell, TableBody } from '@mui/material';
 import { IGuest } from 'app/models/guest';
 import React from 'react';
 import { useParams } from 'react-router';
@@ -9,13 +9,19 @@ import allReservations from 'assets/json/reservations.json';
 import rooms from 'assets/json/rooms.json';
 import { IReservation } from 'app/models/reservation';
 import moment from 'moment';
+import { DetailsPage } from '../layout/detailsPage';
+import { useHistory } from 'react-router';
 
 const useStyles = makeStyles((theme: Theme) => ({
   label: {
     textAlign: 'end',
   },
+  guestLabel: {
+    paddingRight: '8px',
+  },
   guestName: {
-    paddingBottom: '12px',
+    textDecoration: 'underline',
+    cursor: 'pointer',
   },
   box: {
     paddingBottom: '12px',
@@ -24,6 +30,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 export const CurrentStay = () => {
   const classes = useStyles();
+  const history = useHistory();
   const [guest, setGuest] = React.useState<IGuest | undefined>(undefined);
   const [reservations, setReservations] = React.useState<IReservation[]>([]);
   const { guestId } = useParams<any>();
@@ -43,17 +50,6 @@ export const CurrentStay = () => {
     }
   }, [guestId]);
 
-  const Row = ({ label, value }) => (
-    <tr>
-      <td className={classes.label}>
-        <Typography color="text">{label}:</Typography>
-      </td>
-      <td>
-        <Typography color="text">{value}</Typography>
-      </td>
-    </tr>
-  );
-
   const daysBetweenDates = (from: string, to: string): number => {
     const a = moment(to);
     const b = moment(from);
@@ -61,30 +57,38 @@ export const CurrentStay = () => {
     return days;
   };
 
-  return (
-    <Grid container spacing={3}>
-      <Grid item xs={12}>
-        <Typography color="primary" variant="h5">
-          {`Current Stay`}
+  const GuestName = ({ firstName, lastName }) => (
+    <Grid container>
+      <Grid item>
+        <Typography className={classes.guestLabel} variant="h5">
+          {'Guest:'}
         </Typography>
       </Grid>
-      <Grid item xs={12}>
-        <Divider />
+      <Grid item>
+        <Box
+          className={classes.box}
+          onClick={() => {
+            history.push(`/guest/${guestId}/profile`);
+          }}
+        >
+          <Typography className={classes.guestName} variant="h5">{`${firstName} ${lastName}`}</Typography>
+        </Box>
       </Grid>
-      <Grid item xs={12}>
-        {guest && (
-          <Paper style={{ padding: '12px' }}>
-            <Box className={classes.box}>
-              <Typography
-                className={classes.guestName}
-                color="text"
-                variant="h5"
-              >{`Guest: ${guest.first} ${guest.last}`}</Typography>
-              <Divider />
-            </Box>
-            {reservations.length > 0 ? (
-              <Table>
-                <TableHead>
+    </Grid>
+  );
+
+  return (
+    <DetailsPage title="Current Stay">
+      {guest && (
+        <Paper style={{ padding: '12px' }}>
+          <Box className={classes.box}>
+            <GuestName firstName={guest.first} lastName={guest.last} />
+            <Divider />
+          </Box>
+          {reservations.length > 0 ? (
+            <Table>
+              <TableHead>
+                <TableRow>
                   <TableCell>Room Number</TableCell>
                   <TableCell>Room Type</TableCell>
                   <TableCell>Room Rate ($/Day</TableCell>
@@ -94,7 +98,9 @@ export const CurrentStay = () => {
                   <TableCell>Payments Made</TableCell>
                   <TableCell>Balance</TableCell>
                   <TableCell></TableCell>
-                </TableHead>
+                </TableRow>
+              </TableHead>
+              <TableBody>
                 {reservations.map(reservation => {
                   const roomId = rooms.map(room => room.roomId).indexOf(reservation.roomId);
                   const room = rooms[roomId];
@@ -113,15 +119,15 @@ export const CurrentStay = () => {
                     </TableRow>
                   );
                 })}
-              </Table>
-            ) : (
-              <Typography color="primary" variant="h6">
-                No Reservations
-              </Typography>
-            )}
-          </Paper>
-        )}
-      </Grid>
-    </Grid>
+              </TableBody>
+            </Table>
+          ) : (
+            <Typography color="primary" variant="h6">
+              No Reservations
+            </Typography>
+          )}
+        </Paper>
+      )}
+    </DetailsPage>
   );
 };

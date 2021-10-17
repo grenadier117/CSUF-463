@@ -1,7 +1,8 @@
-import { Typography, Grid, Divider, Paper } from '@mui/material';
+import { Typography, Paper } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Theme } from '@mui/system';
 import { IGuest } from 'app/models/guest';
+import { DetailsPage } from 'app/pages/layout/detailsPage';
 import customerList from 'assets/json/customerList.json';
 import React from 'react';
 import { useParams } from 'react-router';
@@ -41,28 +42,18 @@ export const GuestProfile = () => {
   );
 
   return (
-    <Grid container spacing={3}>
-      <Grid item xs={12}>
-        <Typography color="primary" variant="h5">
-          {`Guest Profile`}
-        </Typography>
-      </Grid>
-      <Grid item xs={12}>
-        <Divider />
-      </Grid>
-      <Grid item xs={12}>
-        {guest && (
-          <Paper>
-            <table cellPadding="6px 12px">
-              <Row label="Name" value={`${guest.first} ${guest.last}`} />
-              <Row label="Phone Number" value={`${guest.phone}`} />
-              <Row label="Email" value={`${guest.email}`} />
-              <Row label="Address" value={`${guest.address}`} />
-              <Row label="License Place" value={`${guest.licensePlate}`} />
-            </table>
-          </Paper>
-        )}
-      </Grid>
-    </Grid>
+    <DetailsPage title="Guest Profile">
+      {guest && (
+        <Paper>
+          <table cellPadding="6px 12px">
+            <Row label="Name" value={`${guest.first} ${guest.last}`} />
+            <Row label="Phone Number" value={`${guest.phone}`} />
+            <Row label="Email" value={`${guest.email}`} />
+            <Row label="Address" value={`${guest.address}`} />
+            <Row label="License Place" value={`${guest.licensePlate}`} />
+          </table>
+        </Paper>
+      )}
+    </DetailsPage>
   );
 };
