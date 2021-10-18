@@ -11,8 +11,8 @@
     "website": true
   },
   {
-    "roomId": 3,
-    "guestId": 3,
+    "roomId": 2,
+    "guestId": 2,
     "checkIn": "10/18/2021",
     "checkOut": "10/22/2021",
     "active": true,
@@ -20,5 +20,40 @@
     "balance": 0.0,
     "dateMade": "08/20/2021",
     "website": false
+  },
+
+  {
+    "roomId": 4,
+    "guestId": 4,
+    "checkIn": "10/18/2021",
+    "checkOut": "10/20/2021",
+    "active": true,
+    "payment": 100.0,
+    "balance": 0.0,
+    "dateMade": "08/20/2021",
+    "website": false
+  },
+  {
+    "roomId": 7,
+    "guestId": 7,
+    "checkIn": "10/21/2021",
+    "checkOut": "10/25/2021",
+    "active": true,
+    "payment": 100.0,
+    "balance": 0.0,
+    "dateMade": "09/12/2021",
+    "website": false
+  },
+  {
+    "roomId": 6,
+    "guestId": 6,
+    "checkIn": "10/16/2021",
+    "checkOut": "10/22/2021",
+    "active": true,
+    "payment": 100.0,
+    "balance": 0.0,
+    "dateMade": "08/20/2021",
+    "website": true
   }
+
 ]

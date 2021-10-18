@@ -52,6 +52,13 @@ export const NavigationDrawer = ({ open, onClose }) => {
               </Typography>
             </Link>
           </MenuItem>
+          <MenuItem>
+              <Link href="/housekeeping">
+              <Typography variant="h5" className={classes.link}>
+                {'House keeping'}
+              </Typography>
+            </Link>
+          </MenuItem>
         </MenuList>
       </Drawer>
     </ClickAwayListener>
