@@ -38,7 +38,7 @@
   {
     "roomId": 5,
     "roomType": "S",
-    "roomNumber": 4,
+    "roomNumber": 5,
     "roomRate": 15.00,
     "available": true,
     "maintainance": true,
@@ -47,7 +47,7 @@
   {
     "roomId": 6,
     "roomType": "K",
-    "roomNumber": 5,
+    "roomNumber": 6,
     "roomRate": 25.00,
     "available": true,
     "maintainance": false,
@@ -56,7 +56,7 @@
   {
     "roomId": 7,
     "roomType": "DBK",
-    "roomNumber": 6,
+    "roomNumber": 7,
     "roomRate": 30.00,
     "available": true,
     "maintainance": false,
