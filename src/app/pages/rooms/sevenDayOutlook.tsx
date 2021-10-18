@@ -55,7 +55,7 @@ export const SevenDayOutlook = () => {
     if (guestId !== -1) history.push(`/guest/${guestId}/currentstay`);
   };
 
-  const days = [1, 2, 3, 4, 5, 6, 7];
+  const days = [0, 1, 2, 3, 4, 5, 6];
 
   const classes = useStyles();
   return (
