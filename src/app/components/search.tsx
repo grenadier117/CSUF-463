@@ -3,6 +3,7 @@ import { makeStyles } from '@mui/styles';
 import { useState } from 'react';
 import customers from 'assets/json/customerList.json';
 import TextField from './textField';
+import {TextField as TextBox} from '@mui/material';
 
 const useStyles = makeStyles({
   paper: {
@@ -15,6 +16,7 @@ const useStyles = makeStyles({
   },
   box: {
     margin: '40px',
+    justifyContent: "center",
   },
 });
 
@@ -44,21 +46,34 @@ export const Customer = () => {
 
   return (
     <Box className={classes.box}>
-      <TextField value={search} onChange={setSearch}></TextField>
-      <Button variant="outlined" onClick={searchCustomer}>
-        Confirm
-      </Button>
-      <Box className={classes.box}>
+
+      <Box className={classes.box} display='flex'>
         <FormControl component="fieldset">
-          <FormLabel component="legend">Search</FormLabel>
+          <FormLabel component="legend">Provide any info</FormLabel>
+          <TextBox id="firstname" placeholder="First Name"> 
+          </TextBox>
+          <TextBox id="lastname" placeholder="Last Name"> 
+          </TextBox>
+          <TextBox id="phone" placeholder="Phone"> 
+          </TextBox>
+          <TextBox id="id" placeholder="ID"> 
+          </TextBox>
+          
+      <Button variant="outlined" onClick={searchCustomer}>
+        Search
+      </Button>
           <RadioGroup row aria-label="search" name="row-radio-buttons-group" defaultValue={parameter}>
-            <FormControlLabel value="first" control={<Radio />} onChange={onSelectParameter} label="First Name" />
+{/*             <FormControlLabel value="first" control={<Radio />} onChange={onSelectParameter} label="First Name" />
             <FormControlLabel value="last" control={<Radio />} onChange={onSelectParameter} label="Last Name" />
             <FormControlLabel value="phone" control={<Radio />} onChange={onSelectParameter} label="Phone" />
-            <FormControlLabel value="id" control={<Radio />} onChange={onSelectParameter} label="ID #" />
+            <FormControlLabel value="id" control={<Radio />} onChange={onSelectParameter} label="ID #" /> */}
           </RadioGroup>
+          
         </FormControl>
+        
       </Box>
+      
     </Box>
+    
   );
 };
