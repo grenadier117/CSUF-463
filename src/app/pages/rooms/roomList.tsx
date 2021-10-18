@@ -66,7 +66,7 @@ export const RoomList = () => {
           <TableHead>
             <TableRow>
               <TableCell>Room Number</TableCell>
-              <TableCell>Room Tyoe</TableCell>
+              <TableCell>Room Type</TableCell>
               <TableCell>Status</TableCell>
             </TableRow>
           </TableHead>
