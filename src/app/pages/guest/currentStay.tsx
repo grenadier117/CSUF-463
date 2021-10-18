@@ -11,6 +11,7 @@ import { IReservation } from 'app/models/reservation';
 import moment from 'moment';
 import { DetailsPage } from '../layout/detailsPage';
 import { useHistory } from 'react-router';
+import { calculateBalance, calculateTotalCharge } from 'app/helpers/helpers';
 
 const useStyles = makeStyles((theme: Theme) => ({
   label: {
@@ -111,14 +112,18 @@ export const CurrentStay = () => {
                       <TableCell>{`$${room.roomRate}`}</TableCell>
                       <TableCell>{`${moment(reservation.checkIn).format('MM/DD/YYYY')}`}</TableCell>
                       <TableCell>{`${moment(reservation.checkOut).format('MM/DD/YYYY')}`}</TableCell>
-                      <TableCell>{`$${
-                        room.roomRate * daysBetweenDates(reservation.checkIn, reservation.checkOut)
-                      }`}</TableCell>
+                      <TableCell>{`$${calculateTotalCharge(
+                        room.roomRate,
+                        reservation.checkIn,
+                        reservation.checkOut,
+                      )}`}</TableCell>
                       <TableCell>{`$${reservation.payment}`}</TableCell>
-                      <TableCell>{`$${
-                        room.roomRate * daysBetweenDates(reservation.checkIn, reservation.checkOut) -
-                        reservation.payment
-                      }`}</TableCell>
+                      <TableCell>{`$${calculateBalance(
+                        room.roomRate,
+                        reservation.checkIn,
+                        reservation.checkOut,
+                        reservation.payment,
+                      )}`}</TableCell>
                     </TableRow>
                   );
                 })}

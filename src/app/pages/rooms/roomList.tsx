@@ -18,6 +18,7 @@ import reservations from 'assets/json/reservations.json';
 import React from 'react';
 import moment from 'moment';
 import { DetailsPage } from '../layout/detailsPage';
+import { roomStatus } from 'app/helpers/helpers';
 
 /**
  * Create styles for this component
@@ -38,24 +39,6 @@ export const RoomList = () => {
    * Each style class compiles to a string value that is used with className
    */
 
-  const roomStatus = (roomId, maintainance, clean) => {
-    const today = moment();
-    let status = '';
-    const reservationsFound = reservations.filter(
-      res => res.roomId === roomId && moment(res.checkIn) <= today && today <= moment(res.checkOut),
-    );
-    if (reservationsFound.length > 0 || !clean || maintainance) {
-      //found reservation for this room for for today
-      status = 'Unavailable';
-      if (reservationsFound.length > 0) status += '/Occupied';
-      else if (maintainance) status += '/Maintenance';
-      else if (!clean) status += '/Dirty';
-    } else {
-      status = 'Available';
-    }
-    return status;
-  };
-
   const classes = useStyles();
   return (
     /** Create a list for each of the rooms.
@@ -75,7 +58,7 @@ export const RoomList = () => {
               <TableRow>
                 <TableCell>{room.roomNumber}</TableCell>
                 <TableCell>{room.roomType}</TableCell>
-                <TableCell>{roomStatus(room.roomId, room.maintainance, room.clean)}</TableCell>
+                <TableCell>{roomStatus(reservations, room.roomId, room.maintainance, room.clean)}</TableCell>
               </TableRow>
             ))}
           </TableBody>
