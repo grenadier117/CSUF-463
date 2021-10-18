@@ -6,7 +6,15 @@
     "roomRate": 25.00,
     "available": false,
     "maintainance": false,
-    "clean": false
+    "clean": false,
+    "housekeeping": {
+      "bathroom": true,
+      "towels": false,
+      "bedSheets": true,
+      "vacuum": true,
+      "dustring": false,
+      "electronics": false
+    }
   },
   {
     "roomId": 2,
@@ -15,7 +23,15 @@
     "roomRate": 20.00,
     "available": true,
     "maintainance": false,
-    "clean": true
+    "clean": true,
+    "housekeeping": {
+      "bathroom": true,
+      "towels": false,
+      "bedSheets": true,
+      "vacuum": true,
+      "dustring": false,
+      "electronics": false
+    }
   },
   {
     "roomId": 3,
@@ -24,7 +40,15 @@
     "roomRate": 30.00,
     "available": true,
     "maintainance": false,
-    "clean": true
+    "clean": true,
+    "housekeeping": {
+      "bathroom": true,
+      "towels": false,
+      "bedSheets": true,
+      "vacuum": true,
+      "dustring": false,
+      "electronics": false
+    }
   },
   {
     "roomId": 4,
@@ -33,7 +57,15 @@
     "roomRate": 15.00,
     "available": true,
     "maintainance": false,
-    "clean": true
+    "clean": true,
+    "housekeeping": {
+      "bathroom": true,
+      "towels": false,
+      "bedSheets": true,
+      "vacuum": true,
+      "dustring": false,
+      "electronics": false
+    }
   },
   {
     "roomId": 5,
@@ -42,7 +74,15 @@
     "roomRate": 15.00,
     "available": true,
     "maintainance": true,
-    "clean": true
+    "clean": true,
+    "housekeeping": {
+      "bathroom": true,
+      "towels": false,
+      "bedSheets": true,
+      "vacuum": true,
+      "dustring": false,
+      "electronics": false
+    }
   },
   {
     "roomId": 6,
@@ -51,7 +91,15 @@
     "roomRate": 25.00,
     "available": true,
     "maintainance": false,
-    "clean": false
+    "clean": false,
+    "housekeeping": {
+      "bathroom": true,
+      "towels": false,
+      "bedSheets": true,
+      "vacuum": true,
+      "dustring": false,
+      "electronics": false
+    }
   },
   {
     "roomId": 7,
@@ -60,6 +108,14 @@
     "roomRate": 30.00,
     "available": true,
     "maintainance": false,
-    "clean": true
+    "clean": true,
+    "housekeeping": {
+      "bathroom": true,
+      "towels": false,
+      "bedSheets": true,
+      "vacuum": true,
+      "dustring": false,
+      "electronics": false
+    }
   }
 ]

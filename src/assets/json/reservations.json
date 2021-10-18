@@ -6,7 +6,9 @@
     "checkOut": "10/20/2021",
     "active": true,
     "payment": 100.0,
-    "balance": 0.0
+    "balance": 0.0,
+    "dateMade": "09/10/2021",
+    "website": true
   },
   {
     "roomId": 3,
@@ -15,6 +17,8 @@
     "checkOut": "10/22/2021",
     "active": true,
     "payment": 100.0,
-    "balance": 0.0
+    "balance": 0.0,
+    "dateMade": "08/20/2021",
+    "website": false
   }
 ]
