@@ -1,6 +1,7 @@
+import { IReservation } from 'app/models/reservation';
 import moment from 'moment';
 
-export const roomStatus = (reservations: any[], roomId: number, maintainance: boolean, clean: boolean) => {
+export const roomStatus = (reservations: IReservation[], roomId: number, maintainance: boolean, clean: boolean) => {
   const today = moment();
   let status = '';
   const reservationsFound = reservations.filter(
