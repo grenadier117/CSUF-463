@@ -9,6 +9,7 @@ import { SevenDayOutlook } from './pages/rooms/sevenDayOutlook';
 import { PageNotFound } from './pages/pageNotFound';
 import { Customer } from './pages/guest/search';
 import { Reservations } from './pages/reservations/reservations';
+import { Housekeeping } from './pages/housekeeping/housekeeping';
 
 export const Routes: React.FC = () => (
   <div>
@@ -21,6 +22,7 @@ export const Routes: React.FC = () => (
         <Layout exact path="/guest/:guestId/profile" Component={GuestProfile} />
         <Layout exact path="/guest/:guestId/currentstay" Component={CurrentStay} />
         <Layout exact path="/reservations" Component={Reservations} />
+        <Layout exact path="/housekeeping" Component={Housekeeping} />
         <Route component={PageNotFound} />
       </Switch>
     </Router>
