@@ -24,7 +24,6 @@ export const GuestProfile = () => {
 
   React.useEffect(() => {
     const foundId = customerList.map(item => item.guestId).indexOf(parseInt(guestId));
-    debugger;
     if (foundId !== undefined && foundId !== -1) {
       const a = customerList[foundId];
       console.info('@JAKE - guest info', a);

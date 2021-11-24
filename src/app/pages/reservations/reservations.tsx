@@ -31,7 +31,6 @@ export const Reservations = () => {
             {reservations.map(reservation => {
               const guestIndex = guests.map(g => g.guestId).indexOf(reservation.guestId);
               const roomIndex = rooms.map(r => r.roomId).indexOf(reservation.roomId);
-              debugger;
               return (
                 guestIndex !== -1 &&
                 roomIndex !== -1 && (

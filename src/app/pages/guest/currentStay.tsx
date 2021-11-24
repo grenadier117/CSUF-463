@@ -46,9 +46,7 @@ export const CurrentStay = () => {
       const guestInfo = customerList[foundId];
       setGuest(guestInfo);
       console.info('@JAKE - all reservations', allReservations);
-      debugger;
       const foundReservations = allReservations.filter(item => item.guestId === guestInfo.guestId && item.active);
-      debugger;
       setReservations(foundReservations);
     }
   }, [guestId]);
