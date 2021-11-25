@@ -1,26 +1,14 @@
 /** Jake Hamo */
 
-import {
-  Divider,
-  Grid,
-  List,
-  ListItem,
-  ListItemText,
-  Paper,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  Typography,
-  TableBody,
-} from '@mui/material';
+import { Paper, Table, TableHead, TableRow, TableCell, TableBody } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import rooms from 'assets/json/rooms.json';
-import reservations from 'assets/json/reservations.json';
-import React from 'react';
-import moment from 'moment';
 import { DetailsPage } from '../layout/detailsPage';
 import { roomStatus } from 'app/helpers/helpers';
+import React from 'react';
+import { FirebaseContext } from 'app/app';
+import { collection } from '@firebase/firestore';
+import { useSelector } from 'react-redux';
+import { selectReservations, selectRooms } from 'app/redux/hotel.selector';
 
 /**
  * Create styles for this component
@@ -36,10 +24,8 @@ const useStyles = makeStyles({
 });
 
 export const RoomList = () => {
-  /**
-   * use the custom hook for styles to be able to use them in this component
-   * Each style class compiles to a string value that is used with className
-   */
+  const reservations = useSelector(selectReservations);
+  const rooms = useSelector(selectRooms);
 
   const classes = useStyles();
   return (
@@ -60,7 +46,7 @@ export const RoomList = () => {
               <TableRow>
                 <TableCell>{room.roomNumber}</TableCell>
                 <TableCell>{room.roomType}</TableCell>
-                <TableCell>{roomStatus(reservations, room.roomId, room.maintainance, room.clean)}</TableCell>
+                <TableCell>{roomStatus(reservations, room.roomId, room.maintenance, room.clean)}</TableCell>
               </TableRow>
             ))}
           </TableBody>

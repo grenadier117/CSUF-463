@@ -1,10 +1,12 @@
 export interface IGuest {
+  guestId: string;
   first: string;
   last: string;
   phone: string;
-  email: string;
   address: string;
+  city: string;
   state: string;
-  guestId: number;
+  zip: string;
   licensePlate: string;
+  email: string;
 }

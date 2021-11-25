@@ -1,13 +1,15 @@
 /** Arqum Ahmed */
 
 import { Paper, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
-import reservations from 'assets/json/reservations.json';
-import rooms from 'assets/json/rooms.json';
 import { roomStatus } from 'app/helpers/helpers';
 import { DetailsPage } from '../layout/detailsPage';
+import { useSelector } from 'react-redux';
+import { selectReservations, selectRooms } from 'app/redux/hotel.selector';
 
 export const Housekeeping = () => {
   const displayBoolean = value => (value ? 'True' : 'False');
+  const reservations = useSelector(selectReservations);
+  const rooms = useSelector(selectRooms);
 
   return (
     <DetailsPage title="Housekeeping">
@@ -38,12 +40,12 @@ export const Housekeeping = () => {
                     <TableCell>{housekeep.name}</TableCell>
                     <TableCell>{room.roomNumber}</TableCell>
                     <TableCell>{room.roomType}</TableCell>
-                    <TableCell>{roomStatus(foundReservations, room.roomId, room.maintainance, room.clean)}</TableCell>
+                    <TableCell>{roomStatus(foundReservations, room.roomId, room.maintenance, room.clean)}</TableCell>
                     <TableCell>{displayBoolean(housekeep.bathroom)}</TableCell>
                     <TableCell>{displayBoolean(housekeep.towels)}</TableCell>
-                    <TableCell>{displayBoolean(housekeep.bedSheets)}</TableCell>
+                    <TableCell>{displayBoolean(housekeep.bedsheets)}</TableCell>
                     <TableCell>{displayBoolean(housekeep.vacuum)}</TableCell>
-                    <TableCell>{displayBoolean(housekeep.dustring)}</TableCell>
+                    <TableCell>{displayBoolean(housekeep.dusting)}</TableCell>
                     <TableCell>{displayBoolean(housekeep.electronics)}</TableCell>
                   </TableRow>
                 );

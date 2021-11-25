@@ -2,14 +2,13 @@
 
 import { Paper, Table, TableHead, TableRow, TableCell, Typography, TableBody, Box } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import rooms from 'assets/json/rooms.json';
-import reservations from 'assets/json/reservations.json';
-import guests from 'assets/json/customerList.json';
 import React from 'react';
 import moment from 'moment';
 import { DetailsPage } from '../layout/detailsPage';
 import { addDays } from 'date-fns';
 import { useHistory } from 'react-router';
+import { useSelector } from 'react-redux';
+import { selectGuests, selectReservations, selectRooms } from 'app/redux/hotel.selector';
 
 /**
  * Create styles for this component
@@ -31,6 +30,9 @@ const useStyles = makeStyles({
 export const SevenDayOutlook = () => {
   const [today] = React.useState<Date>(new Date());
   const history = useHistory();
+  const reservations = useSelector(selectReservations);
+  const rooms = useSelector(selectRooms);
+  const guests = useSelector(selectGuests);
   /**
    * use the custom hook for styles to be able to use them in this component
    * Each style class compiles to a string value that is used with className
@@ -38,7 +40,6 @@ export const SevenDayOutlook = () => {
 
   const isRoomReserved = (roomId, day) => {
     const lookingAtDay = moment(moment(addDays(today, day)).format('MM/DD/YYYY'));
-    debugger;
     const foundReservations = reservations.filter(
       item => item.roomId === roomId && moment(item.checkIn) <= lookingAtDay && lookingAtDay <= moment(item.checkOut),
     );
@@ -75,23 +76,25 @@ export const SevenDayOutlook = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rooms.map(room => (
-              <TableRow>
-                <TableCell>{room.roomNumber}</TableCell>
-                {days.map(day => {
-                  const { name, guestId } = isRoomReserved(room.roomId, day);
-                  return (
-                    <TableCell>
-                      {guestId !== -1 && (
-                        <Box className={classes.name} onClick={navigate(guestId)}>
-                          <Typography variant="body2">{name}</Typography>
-                        </Box>
-                      )}
-                    </TableCell>
-                  );
-                })}
-              </TableRow>
-            ))}
+            {[...rooms]
+              ?.sort((a, b) => (a.roomNumber > b.roomNumber ? 1 : -1))
+              .map(room => (
+                <TableRow>
+                  <TableCell>{room.roomNumber}</TableCell>
+                  {days.map(day => {
+                    const { name, guestId } = isRoomReserved(room.roomId, day);
+                    return (
+                      <TableCell>
+                        {guestId !== -1 && (
+                          <Box className={classes.name} onClick={navigate(guestId)}>
+                            <Typography variant="body2">{name}</Typography>
+                          </Box>
+                        )}
+                      </TableCell>
+                    );
+                  })}
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
       </Paper>

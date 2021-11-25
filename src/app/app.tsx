@@ -4,12 +4,24 @@ import { configureAppStore } from 'store/configureStore';
 import './app.css';
 import { getDesignTokens } from './global-styles';
 import { Routes } from './routes';
-import React from 'react';
+import React, { createContext } from 'react';
 import { StylesProvider } from '@mui/styles';
 import { createTheme } from '@mui/material/styles';
 import { useCookies } from 'react-cookie';
+// import { Firebase } from './components/firebase';
+import { initializeApp, FirebaseApp } from 'firebase/app';
+import { getFirestore, Firestore } from 'firebase/firestore';
+import { firebaseConfig } from './firebase/firebaseConfig';
+import { Firebase } from './firebase/fireabse';
 
 export const store = configureAppStore();
+const app = initializeApp(firebaseConfig);
+const firestore = getFirestore(app);
+
+export const FirebaseContext = createContext<{ firebaseApp: FirebaseApp; firestore: Firestore }>({
+  firebaseApp: app,
+  firestore: firestore,
+});
 
 export enum ColorMode {
   light = 'light',
@@ -45,9 +57,13 @@ export const App = () => {
       <ColorModeContext.Provider value={colorMode}>
         <ThemeProvider theme={theme}>
           <Provider store={store}>
-            <React.StrictMode>
-              <Routes />
-            </React.StrictMode>
+            <FirebaseContext.Provider value={{ firebaseApp: app, firestore: firestore }}>
+              <Firebase>
+                <React.StrictMode>
+                  <Routes />
+                </React.StrictMode>
+              </Firebase>
+            </FirebaseContext.Provider>
           </Provider>
         </ThemeProvider>
       </ColorModeContext.Provider>

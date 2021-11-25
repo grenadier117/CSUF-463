@@ -47,8 +47,8 @@
   {
     "roomId": 6,
     "guestId": 6,
-    "checkIn": "10/16/2021",
-    "checkOut": "10/22/2021",
+    "checkIn": "11/20/2021",
+    "checkOut": "12/15/2021",
     "active": true,
     "payment": 100.0,
     "balance": 0.0,
