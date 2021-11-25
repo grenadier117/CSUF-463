@@ -5,8 +5,9 @@ import { makeStyles } from '@mui/styles';
 import { Theme } from '@mui/system';
 import { IGuest } from 'app/models/guest';
 import { DetailsPage } from 'app/pages/layout/detailsPage';
-import customerList from 'assets/json/customerList.json';
+import { selectGuests } from 'app/redux/hotel.selector';
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -19,17 +20,15 @@ export const GuestProfile = () => {
   const classes = useStyles();
   const [guest, setGuest] = React.useState<IGuest | undefined>(undefined);
   const { guestId } = useParams<any>();
-
-  console.info('@JAKE - guest', guestId);
+  const customerList = useSelector(selectGuests);
 
   React.useEffect(() => {
-    const foundId = customerList.map(item => item.guestId).indexOf(parseInt(guestId));
+    const foundId = customerList.map(item => item.guestId).indexOf(guestId);
     if (foundId !== undefined && foundId !== -1) {
       const a = customerList[foundId];
-      console.info('@JAKE - guest info', a);
       setGuest(a);
     }
-  }, [guestId]);
+  }, [guestId, customerList]);
 
   const Row = ({ label, value }) => (
     <tr>
@@ -50,7 +49,7 @@ export const GuestProfile = () => {
             <Row label="Name" value={`${guest.first} ${guest.last}`} />
             <Row label="Phone Number" value={`${guest.phone}`} />
             <Row label="Email" value={`${guest.email}`} />
-            <Row label="Address" value={`${guest.address}`} />
+            <Row label="Address" value={`${guest.address} ${guest.city}, ${guest.state} ${guest.zip}`} />
             <Row label="License Place" value={`${guest.licensePlate}`} />
           </table>
         </Paper>

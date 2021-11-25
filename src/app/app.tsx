@@ -12,6 +12,7 @@ import { useCookies } from 'react-cookie';
 import { initializeApp, FirebaseApp } from 'firebase/app';
 import { getFirestore, Firestore } from 'firebase/firestore';
 import { firebaseConfig } from './firebase/firebaseConfig';
+import { Firebase } from './firebase/fireabse';
 
 export const store = configureAppStore();
 const app = initializeApp(firebaseConfig);
@@ -57,9 +58,11 @@ export const App = () => {
         <ThemeProvider theme={theme}>
           <Provider store={store}>
             <FirebaseContext.Provider value={{ firebaseApp: app, firestore: firestore }}>
-              <React.StrictMode>
-                <Routes />
-              </React.StrictMode>
+              <Firebase>
+                <React.StrictMode>
+                  <Routes />
+                </React.StrictMode>
+              </Firebase>
             </FirebaseContext.Provider>
           </Provider>
         </ThemeProvider>

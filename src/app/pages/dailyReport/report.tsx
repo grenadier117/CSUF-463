@@ -2,14 +2,13 @@
 
 import { Paper, Table, TableHead, TableRow, TableCell, Typography, TableBody, Box } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import rooms from 'assets/json/rooms.json';
-import reservations from 'assets/json/reservations.json';
-import guests from 'assets/json/customerList.json';
 import React from 'react';
 import moment from 'moment';
 import { DetailsPage } from '../layout/detailsPage';
 import { addDays } from 'date-fns';
 import { useHistory } from 'react-router';
+import { selectGuests, selectReservations } from 'app/redux/hotel.selector';
+import { useSelector } from 'react-redux';
 
 /**
  * Create styles for this component
@@ -34,6 +33,8 @@ const useStyles = makeStyles({
 export const DailyReport = () => {
   const [today] = React.useState<Date>(new Date());
   const history = useHistory();
+  const reservations = useSelector(selectReservations);
+  const guests = useSelector(selectGuests);
   /**
    * use the custom hook for styles to be able to use them in this component
    * Each style class compiles to a string value that is used with className
@@ -74,50 +75,46 @@ export const DailyReport = () => {
               <TableCell>Guest Name</TableCell>
               <TableCell>Date In/Out</TableCell>
               <TableCell>Amount Paid</TableCell>
-              
             </TableRow>
           </TableHead>
           <TableBody>
-              <TableRow>
-          <TableCell>5</TableCell>
-          <TableCell>Andy L</TableCell>
-          <TableCell>10/22 | 10/23</TableCell>
-          <TableCell>$124.35</TableCell>
-          </TableRow>
+            <TableRow>
+              <TableCell>5</TableCell>
+              <TableCell>Andy L</TableCell>
+              <TableCell>10/22 | 10/23</TableCell>
+              <TableCell>$124.35</TableCell>
+            </TableRow>
 
-          <TableRow>
-          <TableCell>8</TableCell>
-          <TableCell>Bob</TableCell>
-          <TableCell>10/22 | 10/23</TableCell>
-          <TableCell>$724.35</TableCell>
-          </TableRow>
+            <TableRow>
+              <TableCell>8</TableCell>
+              <TableCell>Bob</TableCell>
+              <TableCell>10/22 | 10/23</TableCell>
+              <TableCell>$724.35</TableCell>
+            </TableRow>
 
-          <TableRow>
-          <TableCell>8</TableCell>
-          <TableCell>Bob</TableCell>
-          <TableCell>10/22 | 10/23</TableCell>
-          <TableCell>$724.35</TableCell>
-          </TableRow>
+            <TableRow>
+              <TableCell>8</TableCell>
+              <TableCell>Bob</TableCell>
+              <TableCell>10/22 | 10/23</TableCell>
+              <TableCell>$724.35</TableCell>
+            </TableRow>
 
-          <TableRow>
-          <TableCell>8</TableCell>
-          <TableCell>Bob</TableCell>
-          <TableCell>10/22 | 10/23</TableCell>
-          <TableCell>$724.35</TableCell>
-          </TableRow>
+            <TableRow>
+              <TableCell>8</TableCell>
+              <TableCell>Bob</TableCell>
+              <TableCell>10/22 | 10/23</TableCell>
+              <TableCell>$724.35</TableCell>
+            </TableRow>
 
-          <TableRow>
+            <TableRow>
               <TableCell></TableCell>
               <TableCell></TableCell>
               <TableCell></TableCell>
               <TableCell>Daily Total: $1020</TableCell>
             </TableRow>
-
           </TableBody>
-
         </Table>
       </Paper>
-      
     </DetailsPage>
   );
 };

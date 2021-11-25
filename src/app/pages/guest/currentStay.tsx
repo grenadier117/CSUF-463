@@ -6,14 +6,13 @@ import React from 'react';
 import { useParams } from 'react-router';
 import { makeStyles } from '@mui/styles';
 import { Theme } from '@mui/system';
-import customerList from 'assets/json/customerList.json';
-import allReservations from 'assets/json/reservations.json';
-import rooms from 'assets/json/rooms.json';
 import { IReservation } from 'app/models/reservation';
 import moment from 'moment';
 import { DetailsPage } from '../layout/detailsPage';
 import { useHistory } from 'react-router';
 import { calculateBalance, calculateTotalCharge } from 'app/helpers/helpers';
+import { useSelector } from 'react-redux';
+import { selectGuests, selectReservations, selectRooms } from 'app/redux/hotel.selector';
 
 const useStyles = makeStyles((theme: Theme) => ({
   label: {
@@ -36,27 +35,20 @@ export const CurrentStay = () => {
   const history = useHistory();
   const [guest, setGuest] = React.useState<IGuest | undefined>(undefined);
   const [reservations, setReservations] = React.useState<IReservation[]>([]);
+  const allReservations = useSelector(selectReservations);
+  const rooms = useSelector(selectRooms);
+  const guestList = useSelector(selectGuests);
   const { guestId } = useParams<any>();
 
-  console.info('@JAKE - guest', guestId);
-
   React.useEffect(() => {
-    const foundId = customerList.map(item => item.guestId).indexOf(parseInt(guestId));
+    const foundId = guestList.map(item => item.guestId).indexOf(guestId);
     if (foundId !== undefined && foundId !== -1) {
-      const guestInfo = customerList[foundId];
+      const guestInfo = guestList[foundId];
       setGuest(guestInfo);
-      console.info('@JAKE - all reservations', allReservations);
       const foundReservations = allReservations.filter(item => item.guestId === guestInfo.guestId && item.active);
       setReservations(foundReservations);
     }
-  }, [guestId]);
-
-  const daysBetweenDates = (from: string, to: string): number => {
-    const a = moment(to);
-    const b = moment(from);
-    const days = a.diff(b, 'days');
-    return days;
-  };
+  }, [guestId, guestList, allReservations]);
 
   const GuestName = ({ firstName, lastName }) => (
     <Grid container>

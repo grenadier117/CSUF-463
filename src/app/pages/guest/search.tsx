@@ -3,8 +3,9 @@
 import { Box, Button, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { useState } from 'react';
-import customers from 'assets/json/customerList.json';
 import { TextField as TextBox } from '@mui/material';
+import { useSelector } from 'react-redux';
+import { selectGuests } from 'app/redux/hotel.selector';
 
 const useStyles = makeStyles({
   paper: {
@@ -25,6 +26,7 @@ export const Customer = () => {
   const classes = useStyles();
   const [search, setSearch] = useState('');
   const [parameter, setParameter] = useState('first');
+  const customers = useSelector(selectGuests);
 
   function searchCustomer() {
     for (let i = 0; i < customers.length; i++) {

@@ -1,14 +1,17 @@
 /** Arqum Ahmed */
 
 import { Paper, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
-import reservations from 'assets/json/reservations.json';
-import guests from 'assets/json/customerList.json';
-import rooms from 'assets/json/rooms.json';
 import moment from 'moment';
 import { calculateTotalCharge } from 'app/helpers/helpers';
 import { DetailsPage } from '../layout/detailsPage';
+import { selectReservations, selectRooms, selectGuests } from 'app/redux/hotel.selector';
+import { useSelector } from 'react-redux';
 
 export const Reservations = () => {
+  const reservations = useSelector(selectReservations);
+  const rooms = useSelector(selectRooms);
+  const guests = useSelector(selectGuests);
+
   return (
     <DetailsPage title="Reservations">
       <Paper>
