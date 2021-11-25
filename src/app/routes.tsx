@@ -10,6 +10,7 @@ import { PageNotFound } from './pages/pageNotFound';
 import { Customer } from './pages/guest/search';
 import { Reservations } from './pages/reservations/reservations';
 import { Housekeeping } from './pages/housekeeping/housekeeping';
+import { GuestEdit } from './pages/guest/profile/guestEdit';
 
 export const Routes: React.FC = () => (
   <div>
@@ -20,6 +21,7 @@ export const Routes: React.FC = () => (
         <Layout exact path="/search" Component={Customer} />
         <Layout exact path="/dailyReport" Component={DailyReport} />
         <Layout exact path="/guest/:guestId/profile" Component={GuestProfile} />
+        <Layout exact path="/guest/:guestId/edit" Component={GuestEdit} />
         <Layout exact path="/guest/:guestId/currentstay" Component={CurrentStay} />
         <Layout exact path="/reservations" Component={Reservations} />
         <Layout exact path="/housekeeping" Component={Housekeeping} />
