@@ -9,11 +9,12 @@ import { FirebaseContext } from 'app/app';
 import { collection } from '@firebase/firestore';
 import { useSelector } from 'react-redux';
 import { selectReservations, selectRooms } from 'app/redux/hotel.selector';
+import { Theme } from '@mui/system';
 
 /**
  * Create styles for this component
  */
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme: Theme) => ({
   room: {
     padding: '12px 24px',
   },
@@ -21,7 +22,13 @@ const useStyles = makeStyles({
   paper: {
     // margin: '50px',
   },
-});
+  tableRow: {
+    '&:hover': {
+      background: theme.palette.mode === 'light' ? '#e6e6e6' : '#595959',
+      cursor: 'pointer',
+    },
+  },
+}));
 
 export const RoomList = () => {
   const reservations = useSelector(selectReservations);
@@ -43,7 +50,7 @@ export const RoomList = () => {
           </TableHead>
           <TableBody>
             {rooms.map(room => (
-              <TableRow>
+              <TableRow className={classes.tableRow}>
                 <TableCell>{room.roomNumber}</TableCell>
                 <TableCell>{room.roomType}</TableCell>
                 <TableCell>{roomStatus(reservations, room.roomId, room.maintenance, room.clean)}</TableCell>
