@@ -164,6 +164,14 @@ export const CurrentStay = () => {
       roomId: roomId,
       website: true,
     }).then(() => {
+      // if (room) {
+      //   updateRoom(firestore, roomId, {
+      //     ...room,
+      //     available: false,
+      //   }).then(() => {
+      //     history.push('/reservations');
+      //   });
+      // }
       history.push('/reservations');
     });
   };

@@ -3,14 +3,40 @@
 import { Paper, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import moment from 'moment';
 import { calculateTotalCharge } from 'app/helpers/helpers';
+import { Theme } from '@mui/system';
 import { DetailsPage } from '../layout/detailsPage';
 import { selectReservations, selectRooms, selectGuests } from 'app/redux/hotel.selector';
 import { useSelector } from 'react-redux';
+import { makeStyles } from '@mui/styles';
+import { IRoom } from 'app/models/room';
+import { useHistory } from 'react-router-dom';
+
+const useStyles = makeStyles((theme: Theme) => ({
+  room: {
+    padding: '12px 24px',
+  },
+  /** style for the inner paper component */
+  paper: {
+    // margin: '50px',
+  },
+  tableRow: {
+    '&:hover': {
+      background: theme.palette.mode === 'light' ? '#e6e6e6' : '#595959',
+      cursor: 'pointer',
+    },
+  },
+}));
 
 export const Reservations = () => {
+  const classes = useStyles();
   const reservations = useSelector(selectReservations);
   const rooms = useSelector(selectRooms);
   const guests = useSelector(selectGuests);
+  const history = useHistory();
+
+  const onNavigate = (guestIndex, roomIndex) => () => {
+    history.push(`/guest/${guests[guestIndex].guestId}/${rooms[roomIndex].roomId}/currentStay`);
+  };
 
   return (
     <DetailsPage title="Reservations">
@@ -37,7 +63,7 @@ export const Reservations = () => {
               return (
                 guestIndex !== -1 &&
                 roomIndex !== -1 && (
-                  <TableRow>
+                  <TableRow className={classes.tableRow} onClick={onNavigate(guestIndex, roomIndex)}>
                     <TableCell>{guests[guestIndex].first}</TableCell>
                     <TableCell>{guests[guestIndex].last}</TableCell>
                     <TableCell>{reservation.dateMade}</TableCell>
