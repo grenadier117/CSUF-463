@@ -2,6 +2,7 @@ import { IGuest } from 'app/models/guest';
 import { IReservation } from 'app/models/reservation';
 import { IRoom } from 'app/models/room';
 import { Firestore, doc, updateDoc, setDoc, collection, deleteDoc } from 'firebase/firestore';
+import _ from 'lodash';
 
 // # REGION Rooms
 /**
@@ -18,9 +19,11 @@ export const updateRoom = (firestore: Firestore, id: string, room: Omit<IRoom, '
 // #ENDREGION
 
 // #REGION GUESTS
-export const updateGuest = (firestore: Firestore, id: string, room: Omit<IGuest, 'guestId'>) => {
+export const updateGuest = (firestore: Firestore, id: string | undefined, guest: Omit<IGuest, 'guestId'>) => {
+  const newGuest = _.cloneDeep(guest);
+  delete newGuest.guestId;
   return updateDoc(doc(collection(firestore, 'guests'), `/${id}`), {
-    ...room,
+    ...newGuest,
   });
 };
 

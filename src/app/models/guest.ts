@@ -1,5 +1,5 @@
 export interface IGuest {
-  guestId: string;
+  guestId?: string;
   first: string;
   last: string;
   phone: string;
@@ -10,3 +10,16 @@ export interface IGuest {
   licensePlate: string;
   email: string;
 }
+
+export const defaultGuest: IGuest = {
+  guestId: '',
+  first: '',
+  last: '',
+  phone: '',
+  address: '',
+  city: '',
+  state: '',
+  zip: '',
+  licensePlate: '',
+  email: '',
+};
