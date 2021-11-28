@@ -153,6 +153,7 @@ export const CurrentStay = () => {
         });
       }
     } else updateReservation(firestore, reservation.reservationId, reservation);
+    history.push(`/roomList`);
   };
 
   const _addReservation = () => {
@@ -164,14 +165,6 @@ export const CurrentStay = () => {
       roomId: roomId,
       website: true,
     }).then(() => {
-      // if (room) {
-      //   updateRoom(firestore, roomId, {
-      //     ...room,
-      //     available: false,
-      //   }).then(() => {
-      //     history.push('/reservations');
-      //   });
-      // }
       history.push('/reservations');
     });
   };
