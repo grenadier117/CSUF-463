@@ -70,7 +70,6 @@ export const CurrentStay = () => {
     const rid = rooms.map(room => room.roomId).indexOf(roomId);
     setRoom(rooms[rid]);
 
-    console.info('@JAKE - res', reservationId);
     // find a guest, if it exists
     const foundGuestId = guestList.map(item => item.guestId).indexOf(guestId);
     if (foundGuestId !== undefined && foundGuestId !== -1) {
