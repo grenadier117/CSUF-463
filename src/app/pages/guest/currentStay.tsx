@@ -100,25 +100,14 @@ export const CurrentStay = () => {
     }
   }, [guestId, guestList, allReservations, roomId]);
 
-  const GuestName = ({ firstName, lastName }) => (
-    <Grid container>
-      <Grid item>
-        <Typography className={classes.guestLabel} variant="h5">
-          {'Guest:'}
-        </Typography>
-      </Grid>
-      <Grid item>
-        <Box
-          className={classes.box}
-          onClick={() => {
-            history.push(`/guest/${guest.guestId || 0}/profile`);
-          }}
-        >
-          <Typography className={classes.guestName} variant="h5">{`${firstName} ${lastName}`}</Typography>
-        </Box>
-      </Grid>
-    </Grid>
-  );
+  const updateDate = key => date => {
+    if (date) {
+      setReservation(prev => ({
+        ...prev,
+        [key]: moment(date).format('MM/DD/YYYY'),
+      }));
+    }
+  };
 
   const _updateReservation = () => {
     if (originalReservation.isCheckedIn && !reservation.isCheckedIn) {
@@ -142,6 +131,26 @@ export const CurrentStay = () => {
       isCheckedIn: true,
     });
   };
+
+  const GuestName = ({ firstName, lastName }) => (
+    <Grid container>
+      <Grid item>
+        <Typography className={classes.guestLabel} variant="h5">
+          {'Guest:'}
+        </Typography>
+      </Grid>
+      <Grid item>
+        <Box
+          className={classes.box}
+          onClick={() => {
+            history.push(`/guest/${guest.guestId || 0}/profile`);
+          }}
+        >
+          <Typography className={classes.guestName} variant="h5">{`${firstName} ${lastName}`}</Typography>
+        </Box>
+      </Grid>
+    </Grid>
+  );
 
   return (
     <DetailsPage title="Current Stay">
@@ -207,14 +216,7 @@ export const CurrentStay = () => {
                       label="Date desktop"
                       inputFormat="MM/dd/yyyy"
                       value={moment(reservation.checkIn).format('MM/DD/YYYY')}
-                      onChange={date => {
-                        if (date) {
-                          setReservation(prev => ({
-                            ...prev,
-                            checkIn: moment(date).format('MM/DD/YYYY'),
-                          }));
-                        }
-                      }}
+                      onChange={updateDate('checkIn')}
                       renderInput={params => <TextField {...params} />}
                     />
                   </LocalizationProvider>
@@ -225,14 +227,7 @@ export const CurrentStay = () => {
                       label="Date desktop"
                       inputFormat="MM/dd/yyyy"
                       value={moment(reservation.checkOut).format('MM/DD/YYYY')}
-                      onChange={date => {
-                        if (date) {
-                          setReservation(prev => ({
-                            ...prev,
-                            checkOut: moment(date).format('MM/DD/YYYY'),
-                          }));
-                        }
-                      }}
+                      onChange={updateDate('checkOut')}
                       renderInput={params => <TextField {...params} />}
                     />
                   </LocalizationProvider>
