@@ -43,14 +43,14 @@ const useStyles = makeStyles((theme: Theme) => ({
     textAlign: 'end',
   },
   guestLabel: {
-    paddingRight: '8px',
+    paddingRight: '12px',
+  },
+  guestNameContainer: {
+    marginBottom: '10px',
   },
   guestName: {
     textDecoration: 'underline',
     cursor: 'pointer',
-  },
-  box: {
-    paddingBottom: '12px',
   },
 }));
 
@@ -132,60 +132,52 @@ export const CurrentStay = () => {
     });
   };
 
-  const GuestName = ({ firstName, lastName }) => (
-    <Grid container>
+  const GuestName = props => (
+    <Grid container alignItems="center" className={classes.guestNameContainer}>
       <Grid item>
         <Typography className={classes.guestLabel} variant="h5">
           {'Guest:'}
         </Typography>
       </Grid>
-      <Grid item>
-        <Box
-          className={classes.box}
-          onClick={() => {
-            history.push(`/guest/${guest.guestId || 0}/profile`);
-          }}
-        >
-          <Typography className={classes.guestName} variant="h5">{`${firstName} ${lastName}`}</Typography>
-        </Box>
-      </Grid>
+      <Grid item>{props.children}</Grid>
     </Grid>
   );
 
   return (
     <DetailsPage title="Current Stay">
       <Paper style={{ padding: '12px' }}>
-        <Box className={classes.box}>
+        <Box>
           {guest.guestId ? (
-            <GuestName firstName={guest.first || ''} lastName={guest.last || ''} />
+            <GuestName>
+              <Box
+                onClick={() => {
+                  history.push(`/guest/${guest.guestId || 0}/profile`);
+                }}
+              >
+                <Typography className={classes.guestName} variant="h5">{`${guest.first} ${guest.last}`}</Typography>
+              </Box>
+            </GuestName>
           ) : (
-            <Grid container style={{ marginBottom: '10px' }} alignItems="center">
-              <Grid item>
-                <Typography className={classes.guestLabel} variant="h5">
-                  {'Guest:'}
-                </Typography>
-              </Grid>
-              <Grid>
-                <FormControl size="small" style={{ width: 'auto', minWidth: '170px' }}>
-                  <InputLabel id="demo-simple-select-label">Select Guest</InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={guest.guestId}
-                    label="Select Guest"
-                    size="small"
-                    onChange={event => {
-                      const foundGuest = guestList[guestList.map(item => item.guestId).indexOf(event.target.value)];
-                      setGuest(foundGuest);
-                    }}
-                  >
-                    {guestList.map(item => (
-                      <MenuItem value={item.guestId}>{`${item.first} ${item.last}`}</MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-            </Grid>
+            <GuestName>
+              <FormControl size="small" style={{ width: 'auto', minWidth: '170px' }}>
+                <InputLabel id="demo-simple-select-label">Select Guest</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={guest.guestId}
+                  label="Select Guest"
+                  size="small"
+                  onChange={event => {
+                    const foundGuest = guestList[guestList.map(item => item.guestId).indexOf(event.target.value)];
+                    setGuest(foundGuest);
+                  }}
+                >
+                  {guestList.map(item => (
+                    <MenuItem value={item.guestId}>{`${item.first} ${item.last}`}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </GuestName>
           )}
           <Divider />
         </Box>
