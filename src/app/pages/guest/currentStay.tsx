@@ -17,6 +17,7 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  Checkbox,
 } from '@mui/material';
 import { defaultGuest, IGuest } from 'app/models/guest';
 import React from 'react';
@@ -119,7 +120,11 @@ export const CurrentStay = () => {
   };
 
   const _addReservation = () => {
-    addReservation(firestore, reservation);
+    addReservation(firestore, {
+      ...reservation,
+      active: true,
+      isCheckedIn: true,
+    });
   };
 
   return (
@@ -170,6 +175,7 @@ export const CurrentStay = () => {
               <TableCell>Total Charge</TableCell>
               <TableCell>Payments Made</TableCell>
               <TableCell>Balance</TableCell>
+              <TableCell>Checked In</TableCell>
               <TableCell></TableCell>
             </TableRow>
           </TableHead>
@@ -241,6 +247,17 @@ export const CurrentStay = () => {
                         reservation.payment || 0,
                       )}`
                     : 0}
+                </TableCell>
+                <TableCell>
+                  <Checkbox
+                    value={reservation.isCheckedIn}
+                    onChange={event => {
+                      setReservation(prev => ({
+                        ...prev,
+                        isCheckedIn: event?.target.checked,
+                      }));
+                    }}
+                  />
                 </TableCell>
                 <TableCell>
                   {reservation.reservationId !== '' ? (

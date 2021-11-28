@@ -11,6 +11,7 @@ export interface IReservation {
   balance: number;
   dateMade?: string;
   website: boolean;
+  isCheckedIn: boolean;
 }
 
 export const defaultReservation: IReservation = {
@@ -24,4 +25,5 @@ export const defaultReservation: IReservation = {
   balance: 0,
   dateMade: moment().format('MM/DD/YYYY'),
   website: false,
+  isCheckedIn: false,
 };
