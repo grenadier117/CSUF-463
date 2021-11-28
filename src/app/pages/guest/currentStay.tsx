@@ -35,8 +35,9 @@ import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { IRoom } from 'app/models/room';
-import { addReservation, updateReservation, updateRoom } from 'app/firebase/helpers';
+import { addGuest, addReservation, makeDocHash, updateReservation, updateRoom } from 'app/firebase/helpers';
 import { FirebaseContext } from 'app/app';
+import AddIcon from '@mui/icons-material/Add';
 
 const useStyles = makeStyles((theme: Theme) => ({
   label: {
@@ -52,6 +53,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     textDecoration: 'underline',
     cursor: 'pointer',
   },
+  addGuestItem: {
+    height: '20px', width: '20px', marginTop: '5px'
+  }
 }));
 
 export const CurrentStay = () => {
@@ -61,6 +65,7 @@ export const CurrentStay = () => {
   const [originalReservation, setOriginalReservation] = React.useState<IReservation>(defaultReservation);
   const [reservation, setReservation] = React.useState<IReservation>(defaultReservation);
   const [room, setRoom] = React.useState<IRoom>();
+  const [addGuestModalOpen, setAddGuestModalOpen] = React.useState<boolean>(false);
   const allReservations = useSelector(selectReservations);
   const rooms = useSelector(selectRooms);
   const guestList = useSelector(selectGuests);
@@ -106,6 +111,21 @@ export const CurrentStay = () => {
         ...prev,
         [key]: moment(date).format('MM/DD/YYYY'),
       }));
+    }
+  };
+
+  const onSelectGuest = event => {
+    if (event.target.value !== '-1') {
+      const foundGuest = guestList[guestList.map(item => item.guestId).indexOf(event.target.value)];
+      setGuest(foundGuest);
+    } else {
+      const newGuest = {
+        ...defaultGuest,
+        first: 'JAKE',
+      };
+      delete newGuest.guestId;
+      const newGuestID = makeDocHash(20);
+      history.push(`/guest/${newGuestID}}/edit/${roomId}`);
     }
   };
 
@@ -167,14 +187,19 @@ export const CurrentStay = () => {
                   value={guest.guestId}
                   label="Select Guest"
                   size="small"
-                  onChange={event => {
-                    const foundGuest = guestList[guestList.map(item => item.guestId).indexOf(event.target.value)];
-                    setGuest(foundGuest);
-                  }}
+                  onChange={onSelectGuest}
                 >
                   {guestList.map(item => (
                     <MenuItem value={item.guestId}>{`${item.first} ${item.last}`}</MenuItem>
                   ))}
+                  <MenuItem value="-1">
+                    <Grid container spacing={1} alignItems="center" alignContent="center">
+                      <Grid item>
+                        <AddIcon className={classes.addGuestItem} />
+                      </Grid>
+                      <Grid item>{'Add Guest'}</Grid>
+                    </Grid>
+                  </MenuItem>
                 </Select>
               </FormControl>
             </GuestName>

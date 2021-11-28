@@ -4,7 +4,7 @@ import { Typography, Paper, Button, Box, TextField, FormControl } from '@mui/mat
 import { makeStyles } from '@mui/styles';
 import { Theme } from '@mui/system';
 import { FirebaseContext } from 'app/app';
-import { updateGuest } from 'app/firebase/helpers';
+import { addGuestWithID, updateGuest } from 'app/firebase/helpers';
 import { globalActions } from 'app/global/global.redux';
 import { defaultGuest, IGuest } from 'app/models/guest';
 import { DetailsPage } from 'app/pages/layout/detailsPage';
@@ -24,7 +24,7 @@ export const GuestEdit = () => {
   const classes = useStyles();
   const history = useHistory();
   const [guest, setGuest] = React.useState<IGuest>(defaultGuest);
-  const { guestId } = useParams<any>();
+  const { guestId, roomId } = useParams<any>();
   const customerList = useSelector(selectGuests);
   const { firestore } = React.useContext(FirebaseContext);
   const dispatch = useDispatch();
@@ -80,7 +80,8 @@ export const GuestEdit = () => {
         <Button
           variant="contained"
           onClick={() => {
-            history.push(`/guest/${guestId}/profile`);
+            if (roomId) history.push(`/guest/0/${roomId}/currentStay`);
+            else history.push(`/guest/${guestId}/profile`);
           }}
         >
           Cancel
@@ -90,14 +91,26 @@ export const GuestEdit = () => {
           variant="contained"
           color="success"
           onClick={() => {
-            updateGuest(firestore, guest.guestId || '', guest)
-              .then(() => {
-                history.push(`/guest/${guestId}/profile`);
-                dispatch(globalActions.setSnackBar({ message: 'Profile updated', severity: 'success' }));
-              })
-              .catch(() => {
-                dispatch(globalActions.setSnackBar({ message: 'Error updating profile', severity: 'error' }));
-              });
+            if (roomId) {
+              const newGuest = { ...guest };
+              delete newGuest.guestId;
+              addGuestWithID(firestore, guestId, newGuest)
+                .then(() => {
+                  history.push(`/guest/${guestId}/${roomId}/currentStay`);
+                })
+                .catch(() => {
+                  dispatch(globalActions.setSnackBar({ message: 'Error creating profile', severity: 'error' }));
+                });
+            } else {
+              updateGuest(firestore, guest.guestId || '', guest)
+                .then(() => {
+                  history.push(`/guest/${guestId}/profile`);
+                  dispatch(globalActions.setSnackBar({ message: 'Profile updated', severity: 'success' }));
+                })
+                .catch(() => {
+                  dispatch(globalActions.setSnackBar({ message: 'Error updating profile', severity: 'error' }));
+                });
+            }
           }}
         >
           Confirm

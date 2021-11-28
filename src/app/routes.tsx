@@ -22,6 +22,7 @@ export const Routes: React.FC = () => (
         <Layout exact path="/dailyReport" Component={DailyReport} />
         <Layout exact path="/guest/:guestId/profile" Component={GuestProfile} />
         <Layout exact path="/guest/:guestId/edit" Component={GuestEdit} />
+        <Layout exact path="/guest/:guestId/edit/:roomId?" Component={GuestEdit} />
         <Layout exact path="/guest/:guestId/:roomId/currentstay/:reservationId?" Component={CurrentStay} />
         <Layout exact path="/reservations" Component={Reservations} />
         <Layout exact path="/housekeeping" Component={Housekeeping} />
