@@ -5,7 +5,7 @@ export const roomStatus = (reservations: IReservation[], roomId: string, maintai
   const today = moment();
   let status = '';
   const reservationsFound = reservations.filter(
-    res => res.roomId === roomId && moment(res.checkIn) <= today && today <= moment(res.checkOut),
+    res => res.roomId === roomId && res.active && moment(res.checkIn) <= today && today <= moment(res.checkOut),
   );
   if (reservationsFound.length > 0 || !clean || maintainance) {
     //found reservation for this room for for today

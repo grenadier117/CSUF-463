@@ -35,7 +35,7 @@ import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { IRoom } from 'app/models/room';
-import { addReservation, updateReservation } from 'app/firebase/helpers';
+import { addReservation, updateReservation, updateRoom } from 'app/firebase/helpers';
 import { FirebaseContext } from 'app/app';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -58,6 +58,7 @@ export const CurrentStay = () => {
   const classes = useStyles();
   const history = useHistory();
   const [guest, setGuest] = React.useState<IGuest>(defaultGuest);
+  const [originalReservation, setOriginalReservation] = React.useState<IReservation>(defaultReservation);
   const [reservation, setReservation] = React.useState<IReservation>(defaultReservation);
   const [room, setRoom] = React.useState<IRoom>();
   const allReservations = useSelector(selectReservations);
@@ -92,6 +93,10 @@ export const CurrentStay = () => {
         ...reservationToSet,
         roomId: roomId,
       });
+      setOriginalReservation({
+        ...reservationToSet,
+        roomId: roomId,
+      });
     }
   }, [guestId, guestList, allReservations, roomId]);
 
@@ -116,7 +121,18 @@ export const CurrentStay = () => {
   );
 
   const _updateReservation = () => {
-    updateReservation(firestore, reservation.reservationId, reservation);
+    if (originalReservation.isCheckedIn && !reservation.isCheckedIn) {
+      updateReservation(firestore, reservation.reservationId, {
+        ...reservation,
+        active: false,
+      });
+      if (room) {
+        updateRoom(firestore, roomId, {
+          ...room,
+          clean: false,
+        });
+      }
+    } else updateReservation(firestore, reservation.reservationId, reservation);
   };
 
   const _addReservation = () => {
@@ -250,7 +266,7 @@ export const CurrentStay = () => {
                 </TableCell>
                 <TableCell>
                   <Checkbox
-                    value={reservation.isCheckedIn}
+                    checked={reservation.isCheckedIn}
                     onChange={event => {
                       setReservation(prev => ({
                         ...prev,
