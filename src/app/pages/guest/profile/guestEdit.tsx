@@ -38,12 +38,10 @@ export const GuestEdit = () => {
   }, [guestId, customerList]);
 
   const valueChangeHandler = field => event => {
-    if (guest !== undefined) {
-      setGuest(prev => ({
-        ...prev,
-        [field]: event.target.value,
-      }));
-    }
+    setGuest(prev => ({
+      ...prev,
+      [field]: event.target.value,
+    }));
   };
 
   return (
