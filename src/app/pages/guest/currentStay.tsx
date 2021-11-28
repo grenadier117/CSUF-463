@@ -102,6 +102,17 @@ export const CurrentStay = () => {
         ...reservationToSet,
         roomId: roomId,
       });
+    } else {
+      // get possible query params
+      const customDate = new URLSearchParams(window.location.search).get('date');
+      if (customDate !== null) {
+        setReservation({
+          ...defaultReservation,
+          roomId: roomId,
+          checkIn: customDate,
+          checkOut: customDate,
+        });
+      }
     }
   }, [guestId, guestList, allReservations, roomId]);
 

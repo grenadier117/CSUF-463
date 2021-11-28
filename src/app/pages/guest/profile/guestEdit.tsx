@@ -80,7 +80,7 @@ export const GuestEdit = () => {
         <Button
           variant="contained"
           onClick={() => {
-            if (roomId) history.push(`/guest/0/${roomId}/currentStay`);
+            if (roomId) history.goBack();
             else history.push(`/guest/${guestId}/profile`);
           }}
         >
