@@ -2,7 +2,7 @@ import { IReservation } from 'app/models/reservation';
 import moment from 'moment';
 
 export const roomStatus = (reservations: IReservation[], roomId: string, maintainance: boolean, clean: boolean) => {
-  const today = moment();
+  const today = moment(moment().format('MM/DD/YYYY'));
   let status = '';
   const reservationsFound = reservations.filter(
     res => res.roomId === roomId && res.active && moment(res.checkIn) <= today && today <= moment(res.checkOut),
