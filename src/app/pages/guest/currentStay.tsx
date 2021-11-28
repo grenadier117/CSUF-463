@@ -149,6 +149,11 @@ export const CurrentStay = () => {
       ...reservation,
       active: true,
       isCheckedIn: true,
+      guestId: guest.guestId || '',
+      roomId: roomId,
+      website: true,
+    }).then(() => {
+      history.push('/reservations');
     });
   };
 
