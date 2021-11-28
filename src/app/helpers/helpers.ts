@@ -31,5 +31,6 @@ export const calculateTotalCharge = (roomRate, checkIn, checkOut) => {
 };
 
 export const calculateBalance = (roomRate: number, checkIn: string, checkOut: string, payment: number) => {
-  return roomRate * daysBetweenDates(checkIn, checkOut) - payment;
+  const days = daysBetweenDates(checkIn, checkOut);
+  return roomRate * (days + 1) - payment;
 };

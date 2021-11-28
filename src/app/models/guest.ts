@@ -12,7 +12,7 @@ export interface IGuest {
 }
 
 export const defaultGuest: IGuest = {
-  guestId: '',
+  guestId: undefined,
   first: '',
   last: '',
   phone: '',
