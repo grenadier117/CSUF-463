@@ -2,6 +2,7 @@ import { IGuest } from 'app/models/guest';
 import { IReservation } from 'app/models/reservation';
 import { IRoom } from 'app/models/room';
 import { Firestore, doc, updateDoc, setDoc, collection, deleteDoc } from 'firebase/firestore';
+import _ from 'lodash';
 
 // # REGION Rooms
 /**
@@ -18,14 +19,30 @@ export const updateRoom = (firestore: Firestore, id: string, room: Omit<IRoom, '
 // #ENDREGION
 
 // #REGION GUESTS
-export const updateGuest = (firestore: Firestore, id: string, room: Omit<IGuest, 'guestId'>) => {
+export const updateGuest = (firestore: Firestore, id: string | undefined, guest: Omit<IGuest, 'guestId'>) => {
+  const newGuest = _.cloneDeep(guest);
+  delete newGuest.guestId;
   return updateDoc(doc(collection(firestore, 'guests'), `/${id}`), {
-    ...room,
+    ...newGuest,
   });
 };
 
 export const addGuest = (firestore: Firestore, guest: Omit<IGuest, 'guestId'>) => {
-  return setDoc(doc(firestore, 'guests', makeDocHash(20)), guest);
+  const promise = new Promise((resolve, reject) => {
+    const id = makeDocHash(20);
+    setDoc(doc(firestore, 'guests', id), guest)
+      .then(() => {
+        resolve(id);
+      })
+      .catch(error => {
+        reject(error);
+      });
+  });
+  return promise;
+};
+
+export const addGuestWithID = (firestore: Firestore, id: string, guest: Omit<IGuest, 'guestId'>) => {
+  return setDoc(doc(firestore, 'guests', id), guest);
 };
 
 export const deleteGuest = (firestore: Firestore, id: string) => {
@@ -53,7 +70,7 @@ export const deleteReservation = (firestore: Firestore, id: string) => {
 };
 // #ENDREGION
 
-const makeDocHash = len => {
+export const makeDocHash = len => {
   let result = '';
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   const charactersLength = characters.length;

@@ -25,6 +25,11 @@ const useStyles = makeStyles({
     textDecoration: 'underline',
     cursor: 'pointer',
   },
+  empty: {
+    textDecoration: 'underline',
+    cursor: 'pointer',
+    opacity: 0.5,
+  },
 });
 
 export const SevenDayOutlook = () => {
@@ -48,14 +53,21 @@ export const SevenDayOutlook = () => {
       const guestIndex = guests.map(guest => guest.guestId).indexOf(reservation.guestId);
       if (guestIndex !== undefined && guestIndex !== -1) {
         const guest = guests[guestIndex];
-        return { name: `${guest.first} ${guest.last}`, guestId: guest.guestId };
+        return {
+          name: `${guest.first} ${guest.last}`,
+          guestId: guest.guestId,
+          reservationId: reservation.reservationId,
+        };
       }
     }
-    return { name: '', guestId: -1 };
+    return { name: '', guestId: -1, reservationId: -1 };
   };
 
-  const navigate = guestId => event => {
-    if (guestId !== -1) history.push(`/guest/${guestId}/currentstay`);
+  const navigate = (guestId, roomId, reservationId, date?) => event => {
+    if (guestId !== -1)
+      history.push(
+        `/guest/${guestId}/${roomId}/currentstay/${reservationId !== null ? reservationId : `?date=${date}`}`,
+      );
   };
 
   const days = [0, 1, 2, 3, 4, 5, 6];
@@ -82,12 +94,25 @@ export const SevenDayOutlook = () => {
                 <TableRow>
                   <TableCell>{room.roomNumber}</TableCell>
                   {days.map(day => {
-                    const { name, guestId } = isRoomReserved(room.roomId, day);
+                    const { name, guestId, reservationId } = isRoomReserved(room.roomId, day);
                     return (
                       <TableCell>
                         {guestId !== -1 && (
-                          <Box className={classes.name} onClick={navigate(guestId)}>
+                          <Box className={classes.name} onClick={navigate(guestId, room.roomId, reservationId)}>
                             <Typography variant="body2">{name}</Typography>
+                          </Box>
+                        )}
+                        {guestId === -1 && (
+                          <Box
+                            className={classes.empty}
+                            onClick={navigate(
+                              0,
+                              room.roomId,
+                              null,
+                              `${moment(addDays(today, day)).format('MM/DD/YYYY')}`,
+                            )}
+                          >
+                            <Typography variant="body2">{'Empty'}</Typography>
                           </Box>
                         )}
                       </TableCell>

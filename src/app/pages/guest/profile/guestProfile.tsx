@@ -59,7 +59,21 @@ export const GuestProfile = () => {
           </table>
         </Paper>
       )}
-      <Box display="flex" justifyContent="center" alignItems="center" marginTop="15px">
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        marginTop="15px"
+      >
+        <Button
+          variant="contained"
+          onClick={() => {
+            history.goBack();
+          }}
+        >
+          Go Back
+        </Button>
+        <Box marginLeft="15px"></Box>
         <Button
           variant="contained"
           color="warning"
