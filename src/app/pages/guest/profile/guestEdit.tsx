@@ -68,6 +68,8 @@ export const GuestEdit = () => {
               <Box marginTop="15px"></Box>
               <TextField id="address" label="Address" value={guest.address} onChange={valueChangeHandler('address')} />
               <Box marginTop="15px"></Box>
+              <TextField id="address" label="City" value={guest.city} onChange={valueChangeHandler('city')} />
+              <Box marginTop="15px"></Box>
               <TextField id="state" label="State" value={guest.state} onChange={valueChangeHandler('state')} />
               <Box marginTop="15px"></Box>
               <TextField id="zip" label="Zip" value={guest.zip} onChange={valueChangeHandler('zip')} />

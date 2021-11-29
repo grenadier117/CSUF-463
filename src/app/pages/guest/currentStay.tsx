@@ -153,19 +153,20 @@ export const CurrentStay = () => {
         });
       }
     } else updateReservation(firestore, reservation.reservationId, reservation);
-    history.push(`/roomList`);
+    // history.push(`/roomList`);
+    history.goBack();
   };
 
   const _addReservation = () => {
     addReservation(firestore, {
       ...reservation,
       active: true,
-      isCheckedIn: true,
       guestId: guest.guestId || '',
       roomId: roomId,
       website: true,
     }).then(() => {
-      history.push('/reservations');
+      // history.push('/reservations');
+      history.goBack();
     });
   };
 
