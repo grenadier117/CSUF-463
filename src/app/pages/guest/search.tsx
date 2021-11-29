@@ -1,6 +1,6 @@
 /** Andy Lopez */
 
-import { Box, Button, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from '@mui/material';
+import { Box, Button, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, TableHead } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { useState } from 'react';
 import { TextField as TextBox } from '@mui/material';
@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux';
 //import guests from '../../../assets/json/customerList.json';
 //import reservations from '../../../assets/json/reservations.json';
 import { selectReservations, selectRooms, selectGuests } from 'app/redux/hotel.selector';
-
+import { Paper, Table, TableBody, TableCell, TableRow } from '@mui/material';
 
 const useStyles = makeStyles({
   paper: {
@@ -32,14 +32,14 @@ export const Customer = () => {
   const [search, setSearch] = useState('');
   const [parameter, setParameter] = useState('first');
   //const customers = useSelector(selectGuests);
-  const [results, setResults] = useState('User Info');
-  const [reservationsResults, setReservations] = useState('User Reservations');
+  const [results, setResults] = useState('');
+  const [reservationsResults, setReservations] = useState('');
   const reservations = useSelector(selectReservations);
   const guests = useSelector(selectGuests);
 
   function searchCustomer() {
     for (let i = 0; i < guests.length; i++) {
-      if (guests[i][parameter] == search) {
+      if (guests[i][parameter].trim().toLowerCase() == search.trim().toLowerCase()) {
         const customer = guests[i];
         let alertMessage = 'Name: ' + customer['first'] + ' ' + customer['last'] + '\n';
         alertMessage += 'ID#: ' + customer['guestId'] + '\n';
@@ -47,7 +47,6 @@ export const Customer = () => {
         alertMessage += 'Email: ' + customer['email'] + '\n';
         alertMessage += 'Address: ' + customer['address'] + ' ' + customer['state'] + '\n';
         alertMessage += 'License plate: ' + customer['licensePlate'] + '\n';
-        alert(alertMessage);
         updateResults(alertMessage)
         findReservationsbyID(customer['guestId']);
         //ReactDOM.render(element, document.getElementById('id'));
@@ -110,9 +109,22 @@ export const Customer = () => {
           </RadioGroup>
         </FormControl>
       </Box>
-      {results}
-      <br></br>
-      {reservationsResults}
+      <Paper>
+      <Table>
+        <TableHead>
+          <TableRow>
+        <TableCell>Guest Info</TableCell>
+        <TableCell>Guest Reservations</TableCell>
+        </TableRow>
+        </TableHead>
+        <TableBody>
+          <TableRow>
+          <TableCell>{results}</TableCell>
+        <TableCell>{reservationsResults}</TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+      </Paper>
     </Box>
     
   );
