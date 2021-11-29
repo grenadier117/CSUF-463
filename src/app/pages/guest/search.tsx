@@ -5,9 +5,11 @@ import { makeStyles } from '@mui/styles';
 import { useState } from 'react';
 import { TextField as TextBox } from '@mui/material';
 import { useSelector } from 'react-redux';
-import { selectGuests } from 'app/redux/hotel.selector';
-import guests from '../../../assets/json/customerList.json';
-import reservations from '../../../assets/json/reservations.json';
+//import { selectGuests } from 'app/redux/hotel.selector';
+//import guests from '../../../assets/json/customerList.json';
+//import reservations from '../../../assets/json/reservations.json';
+import { selectReservations, selectRooms, selectGuests } from 'app/redux/hotel.selector';
+
 
 const useStyles = makeStyles({
   paper: {
@@ -29,10 +31,11 @@ export const Customer = () => {
   const classes = useStyles();
   const [search, setSearch] = useState('');
   const [parameter, setParameter] = useState('first');
-  const customers = useSelector(selectGuests);
+  //const customers = useSelector(selectGuests);
   const [results, setResults] = useState('User Info');
   const [reservationsResults, setReservations] = useState('User Reservations');
-  
+  const reservations = useSelector(selectReservations);
+  const guests = useSelector(selectGuests);
 
   function searchCustomer() {
     for (let i = 0; i < guests.length; i++) {
@@ -50,7 +53,7 @@ export const Customer = () => {
         //ReactDOM.render(element, document.getElementById('id'));
       }
     }
-    alert("Not Found");
+    
   }
 
   function findReservationsbyID(id) {
