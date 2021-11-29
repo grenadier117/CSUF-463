@@ -1,28 +1,41 @@
 /** Arqum Ahmed */
 
-import { Paper, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
-import moment from 'moment';
-import { calculateTotalCharge } from 'app/helpers/helpers';
-import { Theme } from '@mui/system';
-import { DetailsPage } from '../layout/detailsPage';
-import { selectReservations, selectRooms, selectGuests } from 'app/redux/hotel.selector';
-import { useSelector } from 'react-redux';
-import { makeStyles } from '@mui/styles';
-import { IRoom } from 'app/models/room';
-import { useHistory } from 'react-router-dom';
+import {
+  Button,
+  Paper,
+  Box,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+} from "@mui/material";
+import moment from "moment";
+import { calculateTotalCharge } from "app/helpers/helpers";
+import { Theme } from "@mui/system";
+import { DetailsPage } from "../layout/detailsPage";
+import {
+  selectReservations,
+  selectRooms,
+  selectGuests,
+} from "app/redux/hotel.selector";
+import { useSelector } from "react-redux";
+import { makeStyles } from "@mui/styles";
+import { IRoom } from "app/models/room";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme: Theme) => ({
   room: {
-    padding: '12px 24px',
+    padding: "12px 24px",
   },
   /** style for the inner paper component */
   paper: {
     // margin: '50px',
   },
   tableRow: {
-    '&:hover': {
-      background: theme.palette.mode === 'light' ? '#e6e6e6' : '#595959',
-      cursor: 'pointer',
+    "&:hover": {
+      background: theme.palette.mode === "light" ? "#e6e6e6" : "#595959",
+      cursor: "pointer",
     },
   },
 }));
@@ -35,11 +48,40 @@ export const Reservations = () => {
   const history = useHistory();
 
   const onNavigate = (guestIndex, roomIndex) => () => {
-    history.push(`/guest/${guests[guestIndex].guestId}/${rooms[roomIndex].roomId}/currentStay`);
+    history.push(
+      `/guest/${guests[guestIndex].guestId}/${rooms[roomIndex].roomId}/currentStay`
+    );
   };
 
   return (
     <DetailsPage title="Reservations">
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        marginTop="15px"
+        marginBottom="15px"
+      >
+        <Button
+          variant="contained"
+          color="success"
+          onClick={() => {
+            history.push(`/reservations/rooms`);
+          }}
+        >
+          Add
+        </Button>
+        <Box marginLeft="15px"></Box>
+        <Button
+          variant="contained"
+          color="error"
+          onClick={() => {
+            
+          }}
+        >
+          Delete
+        </Button>
+      </Box>
       <Paper>
         <Table>
           <TableHead>
@@ -57,26 +99,39 @@ export const Reservations = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {reservations.map(reservation => {
-              const guestIndex = guests.map(g => g.guestId).indexOf(reservation.guestId);
-              const roomIndex = rooms.map(r => r.roomId).indexOf(reservation.roomId);
+            {reservations.map((reservation) => {
+              const guestIndex = guests
+                .map((g) => g.guestId)
+                .indexOf(reservation.guestId);
+              const roomIndex = rooms
+                .map((r) => r.roomId)
+                .indexOf(reservation.roomId);
               return (
                 guestIndex !== -1 &&
                 roomIndex !== -1 && (
-                  <TableRow className={classes.tableRow} onClick={onNavigate(guestIndex, roomIndex)}>
+                  <TableRow
+                    className={classes.tableRow}
+                    onClick={onNavigate(guestIndex, roomIndex)}
+                  >
                     <TableCell>{guests[guestIndex].first}</TableCell>
                     <TableCell>{guests[guestIndex].last}</TableCell>
                     <TableCell>{reservation.dateMade}</TableCell>
-                    <TableCell>{moment(reservation.checkIn).format('MM/DD/YYYY')}</TableCell>
-                    <TableCell>{moment(reservation.checkOut).format('MM/DD/YYYY')}</TableCell>
+                    <TableCell>
+                      {moment(reservation.checkIn).format("MM/DD/YYYY")}
+                    </TableCell>
+                    <TableCell>
+                      {moment(reservation.checkOut).format("MM/DD/YYYY")}
+                    </TableCell>
                     <TableCell>{rooms[roomIndex].roomType}</TableCell>
                     <TableCell>{rooms[roomIndex].roomNumber}</TableCell>
-                    <TableCell>{reservation.website ? 'True' : 'False'}</TableCell>
+                    <TableCell>
+                      {reservation.website ? "True" : "False"}
+                    </TableCell>
                     <TableCell>{`$${rooms[roomIndex].roomRate}`}</TableCell>
                     <TableCell>{`$${calculateTotalCharge(
                       rooms[roomIndex].roomRate,
                       reservation.checkIn,
-                      reservation.checkOut,
+                      reservation.checkOut
                     )}`}</TableCell>
                   </TableRow>
                 )

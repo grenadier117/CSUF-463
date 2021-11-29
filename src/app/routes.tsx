@@ -11,6 +11,7 @@ import { Customer } from './pages/guest/search';
 import { Reservations } from './pages/reservations/reservations';
 import { Housekeeping } from './pages/housekeeping/housekeeping';
 import { GuestEdit } from './pages/guest/profile/guestEdit';
+import { RoomPick } from './pages/reservations/roomPick';
 
 export const Routes: React.FC = () => (
   <div>
@@ -25,6 +26,7 @@ export const Routes: React.FC = () => (
         <Layout exact path="/guest/:guestId/edit/:roomId?" Component={GuestEdit} />
         <Layout exact path="/guest/:guestId/:roomId/currentstay/:reservationId?" Component={CurrentStay} />
         <Layout exact path="/reservations" Component={Reservations} />
+        <Layout exact path="/reservations/rooms" Component={RoomPick} />
         <Layout exact path="/housekeeping" Component={Housekeeping} />
         <Route component={PageNotFound} />
       </Switch>
