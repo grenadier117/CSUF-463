@@ -51,7 +51,7 @@ export const RoomList = () => {
     // const r = reservations.filter(
     //   res => res.roomId === room.roomId && moment(res.checkIn) <= today && today <= moment(res.checkOut),
     // );
-    const r = reservations.find(res => res.roomId === room.roomId && res.active == true)
+    const r = reservations.find(res => res.roomId === room.roomId && res.active == true && moment(res.checkIn) <= today && today <= moment(res.checkOut))
     if (r !== undefined) {
       history.push(`/guest/${r.guestId}/${room.roomId}/currentStay`);
     } else if (!room.clean) {
