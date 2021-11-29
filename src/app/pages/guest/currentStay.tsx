@@ -306,7 +306,7 @@ export const CurrentStay = () => {
                   />
                 </TableCell>
                 <TableCell>
-                  {reservation.reservationId !== '' ? (
+                  {reservation.active == true ? (
                     <Button onClick={_updateReservation}>Update</Button>
                   ) : (
                     <Button onClick={_addReservation}>Save</Button>
