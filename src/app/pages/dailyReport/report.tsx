@@ -7,8 +7,8 @@ import moment from 'moment';
 import { DetailsPage } from '../layout/detailsPage';
 import { addDays } from 'date-fns';
 import { useHistory } from 'react-router';
-import { selectGuests, selectReservations } from 'app/redux/hotel.selector';
 import { useSelector } from 'react-redux';
+import { selectGuests, selectReservations, selectRooms } from 'app/redux/hotel.selector';
 
 /**
  * Create styles for this component
@@ -25,15 +25,13 @@ const useStyles = makeStyles({
     textDecoration: 'underline',
     cursor: 'pointer',
   },
-  h1: {
-    color: 'white',
-  },
 });
 
 export const DailyReport = () => {
   const [today] = React.useState<Date>(new Date());
   const history = useHistory();
   const reservations = useSelector(selectReservations);
+  const rooms = useSelector(selectRooms);
   const guests = useSelector(selectGuests);
   /**
    * use the custom hook for styles to be able to use them in this component
@@ -60,7 +58,7 @@ export const DailyReport = () => {
     if (guestId !== -1) history.push(`/guest/${guestId}/currentstay`);
   };
 
-  const days = [0, 1, 2, 3, 4, 5, 6];
+  const days = [0];
 
   const classes = useStyles();
   return (
@@ -72,49 +70,46 @@ export const DailyReport = () => {
           <TableHead>
             <TableRow>
               <TableCell>Room Number</TableCell>
-              <TableCell>Guest Name</TableCell>
-              <TableCell>Date In/Out</TableCell>
-              <TableCell>Amount Paid</TableCell>
+              {days.map(day => (
+                <TableCell>{`${moment(addDays(today, day)).format('MM/DD/YYYY')}`}</TableCell>
+              ))}
+              <TableCell>Date In</TableCell>
+              <TableCell>Date Out</TableCell>
+              <TableCell>Amount</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            <TableRow>
-              <TableCell>5</TableCell>
-              <TableCell>Andy L</TableCell>
-              <TableCell>10/22 | 10/23</TableCell>
-              <TableCell>$124.35</TableCell>
-            </TableRow>
+            {[...rooms]
+              ?.sort((a, b) => (a.roomNumber > b.roomNumber ? 1 : -1))
+              .map(room => (
+                <TableRow>
+                  <TableCell>{room.roomNumber}</TableCell>
+                  
+                  {days.map(day => {
+                    const { name, guestId } = isRoomReserved(room.roomId, day);
+                    return (
+                      <TableCell>
+                        {guestId !== -1 && (
+                          <Box className={classes.name} onClick={navigate(guestId)}>
+                            <Typography variant="body2">{name}</Typography>
+                          </Box>
+                        )}
+                      </TableCell>
+                    );
+                  })}
+                  
 
-            <TableRow>
-              <TableCell>8</TableCell>
-              <TableCell>Bob</TableCell>
-              <TableCell>10/22 | 10/23</TableCell>
-              <TableCell>$724.35</TableCell>
-            </TableRow>
 
-            <TableRow>
-              <TableCell>8</TableCell>
-              <TableCell>Bob</TableCell>
-              <TableCell>10/22 | 10/23</TableCell>
-              <TableCell>$724.35</TableCell>
-            </TableRow>
-
-            <TableRow>
-              <TableCell>8</TableCell>
-              <TableCell>Bob</TableCell>
-              <TableCell>10/22 | 10/23</TableCell>
-              <TableCell>$724.35</TableCell>
-            </TableRow>
-
-            <TableRow>
-              <TableCell></TableCell>
-              <TableCell></TableCell>
-              <TableCell></TableCell>
-              <TableCell>Daily Total: $1020</TableCell>
-            </TableRow>
+                  <TableCell>{room.roomId}</TableCell>
+                  <TableCell>{room.roomId}</TableCell>
+                  <TableCell>{room.roomRate}</TableCell>
+                </TableRow>
+              ))}
+              
           </TableBody>
         </Table>
       </Paper>
+      <h1>Grand Total:</h1>
     </DetailsPage>
   );
 };
