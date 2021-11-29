@@ -48,11 +48,12 @@ export const RoomList = () => {
 
   const onNavigate = (room: IRoom) => () => {
     const today = moment();
-    const r = reservations.filter(
-      res => res.roomId === room.roomId && moment(res.checkIn) <= today && today <= moment(res.checkOut),
-    );
-    if (r.length > 0) {
-      history.push(`/guest/${r[0].guestId}/${room.roomId}/currentStay`);
+    // const r = reservations.filter(
+    //   res => res.roomId === room.roomId && moment(res.checkIn) <= today && today <= moment(res.checkOut),
+    // );
+    const r = reservations.find(res => res.roomId === room.roomId && res.active == true)
+    if (r !== undefined) {
+      history.push(`/guest/${r.guestId}/${room.roomId}/currentStay`);
     } else if (!room.clean) {
       setUpdateDirty(true);
       setAlertRoom(room);
