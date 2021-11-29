@@ -9,6 +9,7 @@ import { addDays } from 'date-fns';
 import { useHistory } from 'react-router';
 import { useSelector } from 'react-redux';
 import { selectGuests, selectReservations, selectRooms } from 'app/redux/hotel.selector';
+import { calculateTotalCharge } from 'app/helpers/helpers';
 
 /**
  * Create styles for this component
@@ -33,6 +34,8 @@ export const DailyReport = () => {
   const reservations = useSelector(selectReservations);
   const rooms = useSelector(selectRooms);
   const guests = useSelector(selectGuests);
+  let guID;
+  let totalsum = 0;
   /**
    * use the custom hook for styles to be able to use them in this component
    * Each style class compiles to a string value that is used with className
@@ -66,16 +69,20 @@ export const DailyReport = () => {
      * This list is wrapped in a paper component for visual purposes */
     <DetailsPage title="Today's Summary">
       <Paper className={classes.paper}>
+
+      {days.map(day => (
+                <h1>{`${moment(addDays(today, day)).format('MM/DD/YYYY')}`}</h1>
+              ))}
+
         <Table>
           <TableHead>
             <TableRow>
               <TableCell>Room Number</TableCell>
               {days.map(day => (
-                <TableCell>{`${moment(addDays(today, day)).format('MM/DD/YYYY')}`}</TableCell>
+                <TableCell> Room occupied by</TableCell>
               ))}
-              <TableCell>Date In</TableCell>
-              <TableCell>Date Out</TableCell>
-              <TableCell>Amount</TableCell>
+              <TableCell>Date In / Date Out</TableCell>
+              
             </TableRow>
           </TableHead>
           <TableBody>
@@ -83,33 +90,66 @@ export const DailyReport = () => {
               ?.sort((a, b) => (a.roomNumber > b.roomNumber ? 1 : -1))
               .map(room => (
                 <TableRow>
-                  <TableCell>{room.roomNumber}</TableCell>
+                      <TableCell>{room.roomNumber}</TableCell>
                   
+                
                   {days.map(day => {
                     const { name, guestId } = isRoomReserved(room.roomId, day);
+                    
+                    guID = guestId;
                     return (
                       <TableCell>
                         {guestId !== -1 && (
+                          
                           <Box className={classes.name} onClick={navigate(guestId)}>
                             <Typography variant="body2">{name}</Typography>
                           </Box>
                         )}
                       </TableCell>
                     );
+                    
                   })}
-                  
+                                {reservations.map(reservation => {
+                                
+                                const guestIndex = guests.map(g => guID).indexOf(reservation.guestId);
+                                const roomIndex = rooms.map(r => r.roomId).indexOf(reservation.roomId);
+                                
+                                totalsum += calculateTotalCharge(
+                                  rooms[roomIndex].roomRate,
+                                  reservation.checkIn,
+                                  reservation.checkOut,
+                                );
+                                
+                                return (
+                                  guestIndex !== -1 &&
+                                  roomIndex !== -1 && (
+                                    <TableRow>
+                                      <TableCell>{moment(reservation.checkIn).format('MM/DD/YYYY')}</TableCell>
+                                      <TableCell>{moment(reservation.checkOut).format('MM/DD/YYYY')}</TableCell>
+                                      <TableCell>{`$${calculateTotalCharge(
+                                        rooms[roomIndex].roomRate,
+                                        reservation.checkIn,
+                                        reservation.checkOut,
+                                      )}`}</TableCell>
+                                    </TableRow>
+                                  )
+                                );
+                              })}
 
 
-                  <TableCell>{room.roomId}</TableCell>
-                  <TableCell>{room.roomId}</TableCell>
-                  <TableCell>{room.roomRate}</TableCell>
+
                 </TableRow>
+                
               ))}
-              
+          <TableRow>
+            <TableCell>
+            Grand Total: ${totalsum}
+            </TableCell>
+            </TableRow>
           </TableBody>
         </Table>
       </Paper>
-      <h1>Grand Total:</h1>
+      
     </DetailsPage>
   );
 };
