@@ -2,10 +2,10 @@ import { IReservation } from 'app/models/reservation';
 import moment from 'moment';
 
 export const roomStatus = (reservations: IReservation[], roomId: string, maintainance: boolean, clean: boolean) => {
-  const today = moment();
+  const today = moment(moment().format('MM/DD/YYYY'));
   let status = '';
   const reservationsFound = reservations.filter(
-    res => res.roomId === roomId && moment(res.checkIn) <= today && today <= moment(res.checkOut),
+    res => res.roomId === roomId && res.active && moment(res.checkIn) <= today && today <= moment(res.checkOut),
   );
   if (reservationsFound.length > 0 || !clean || maintainance) {
     //found reservation for this room for for today
@@ -27,9 +27,15 @@ export const daysBetweenDates = (from: string, to: string): number => {
 };
 
 export const calculateTotalCharge = (roomRate, checkIn, checkOut) => {
-  return roomRate * daysBetweenDates(checkIn, checkOut);
+  return roomRate * (daysBetweenDates(checkIn, checkOut) + 1);
 };
 
 export const calculateBalance = (roomRate: number, checkIn: string, checkOut: string, payment: number) => {
-  return roomRate * daysBetweenDates(checkIn, checkOut) - payment;
+  const days = daysBetweenDates(checkIn, checkOut);
+  return roomRate * (days + 1) - payment;
+};
+
+export const isTodayInRange = (startDate, endDate) => {
+  const today = moment(moment().format('MM/DD/YYYY'));
+  return moment(startDate) <= today && today <= moment(endDate);
 };

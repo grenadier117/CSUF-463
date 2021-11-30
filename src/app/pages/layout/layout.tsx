@@ -23,6 +23,9 @@ const useStyles = makeStyles({
   },
   content: {
     padding: '24px',
+    overflowY: 'auto',
+    minHeight: '100vh',
+    paddingTop: '88px',
   },
 });
 
@@ -55,9 +58,9 @@ export const Layout = ({ Component, ...rest }) => {
       {...rest}
       render={matchProps => (
         <GlobalDisplay>
-          <Grid container direction={'column'} className={classes.root}>
+          <Grid container className={classes.root}>
             <Grid item xs={12}>
-              <AppBar position="static">
+              <AppBar position="fixed">
                 <Toolbar>
                   <MenuIcon className={classes.menu} onClick={toggleMenu} />
                   <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>

@@ -52,9 +52,6 @@ export const SnackBar = ({
   const alignment: SnackbarOrigin = { vertical: 'bottom', horizontal: 'center' };
 
   const _handleClose = (event?: React.SyntheticEvent, reason?: string) => {
-    if (reason === 'clickaway') {
-      return;
-    }
     _setOpen(false);
     handleClose?.();
   };
@@ -74,7 +71,7 @@ export const SnackBar = ({
       <Alert
         action={
           action || (
-            <IconButton>
+            <IconButton onClick={_handleClose}>
               <StyledIcon />
             </IconButton>
           )
