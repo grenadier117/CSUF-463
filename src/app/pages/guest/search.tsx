@@ -1,6 +1,17 @@
 /** Andy Lopez */
 
-import { Box, Button, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, TableHead } from '@mui/material';
+import {
+  Box,
+  Button,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  Radio,
+  RadioGroup,
+  TableHead,
+  Theme,
+  Typography,
+} from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { useState } from 'react';
 import { TextField as TextBox } from '@mui/material';
@@ -10,8 +21,12 @@ import { useSelector } from 'react-redux';
 //import reservations from '../../../assets/json/reservations.json';
 import { selectReservations, selectRooms, selectGuests } from 'app/redux/hotel.selector';
 import { Paper, Table, TableBody, TableCell, TableRow } from '@mui/material';
+import { DetailsPage } from '../layout/detailsPage';
+import { IGuest } from 'app/models/guest';
+import { IReservation } from 'app/models/reservation';
+import { IRoom } from 'app/models/room';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme: Theme) => ({
   paper: {
     minHeight: '100px',
     width: '100%',
@@ -24,8 +39,13 @@ const useStyles = makeStyles({
     margin: '40px',
     justifyContent: 'center',
   },
-});
-
+  radioControl: {
+    color: theme.palette.text.primary,
+  },
+  searchButton: {
+    marginTop: '12px !important',
+  },
+}));
 
 export const Customer = () => {
   const classes = useStyles();
@@ -35,97 +55,117 @@ export const Customer = () => {
   const [results, setResults] = useState('');
   const [reservationsResults, setReservations] = useState('');
   const reservations = useSelector(selectReservations);
+  const rooms = useSelector(selectRooms);
   const guests = useSelector(selectGuests);
+  const [foundGuests, setFoundGuests] = useState<{ guest: IGuest; reservation: IReservation; room: IRoom }[] | null>(
+    null,
+  );
 
   function searchCustomer() {
-    for (let i = 0; i < guests.length; i++) {
-      if (guests[i][parameter].trim().toLowerCase() == search.trim().toLowerCase()) {
-        const customer = guests[i];
-        let alertMessage = 'Name: ' + customer['first'] + ' ' + customer['last'] + '\n';
-        alertMessage += 'ID#: ' + customer['guestId'] + '\n';
-        alertMessage += 'Phone: ' + customer['phone'] + '\n';
-        alertMessage += 'Email: ' + customer['email'] + '\n';
-        alertMessage += 'Address: ' + customer['address'] + ' ' + customer['state'] + '\n';
-        alertMessage += 'License plate: ' + customer['licensePlate'] + '\n';
-        updateResults(alertMessage)
-        findReservationsbyID(customer['guestId']);
-        //ReactDOM.render(element, document.getElementById('id'));
-      }
-    }
-    
-  }
-
-  function findReservationsbyID(id) {
-    let resInfo = "";
-    for (let i = 0; i < reservations.length; i++) {
-      if (reservations[i]['guestId'] == id) {
-        const reservationDates = reservations[i];
-
-        resInfo += 'Check in: ' + reservationDates['checkIn'] + ' Checkout: ' + reservationDates['checkOut'] + '\n';
-        resInfo += 'Room #: ' + reservationDates['roomId'] + '\n';
-        updateReservations(resInfo)
-        //ReactDOM.render(element, document.getElementById('id'));
-      }
-    }
-    
+    const found = guests.filter(item => `${item[parameter]}`.trim().toLowerCase() === search.trim().toLowerCase());
+    const results: { guest: IGuest; reservation: IReservation; room: IRoom }[] = [];
+    reservations.forEach(reservation => {
+      found.forEach(guest => {
+        if (reservation.guestId === guest.guestId) {
+          results.push({
+            guest: guest,
+            reservation: reservation,
+            room: rooms.find(item => item.roomId === reservation.roomId)!,
+          });
+        }
+      });
+    });
+    setFoundGuests(results);
   }
 
   function onSelectParameter(event) {
-
     setParameter(event.target.value);
-    
   }
+
   function onUpdateText(event) {
     setSearch(event.target.value);
-    //setParameter(event.target.value);
-    
-  }
-
-  function updateResults(par) {
-    setResults(par);
-  }
-
-  function updateReservations(par) {
-    setReservations(par);
   }
 
   return (
-    <Box className={classes.box}>
-      
-      <Box className={classes.box} display="flex">
-        <FormControl component="fieldset">
-          <FormLabel component="legend">Provide guest information</FormLabel>
-          <TextBox id="searchbox" placeholder="..." onChange={onUpdateText}>   </TextBox>
-
-
-          <Button variant="outlined" onClick={searchCustomer}>
-            Search By
-          </Button>
-          <RadioGroup row aria-label="search" name="row-radio-buttons-group" defaultValue={parameter}>
-                        <FormControlLabel value="first" control={<Radio />} onChange={onSelectParameter} label="First Name" />
-            <FormControlLabel value="last" control={<Radio />} onChange={onSelectParameter} label="Last Name" />
-            <FormControlLabel value="phone" control={<Radio />} onChange={onSelectParameter} label="Phone" />
-            <FormControlLabel value="guestId" control={<Radio />} onChange={onSelectParameter} label="ID #" />
-          </RadioGroup>
-        </FormControl>
+    <DetailsPage title="Guest Search">
+      <Box className={classes.box}>
+        <Box className={classes.box} display="flex">
+          <FormControl component="fieldset">
+            <FormLabel component="legend">Provide guest information</FormLabel>
+            <RadioGroup row aria-label="search" name="row-radio-buttons-group" defaultValue={parameter}>
+              <FormControlLabel
+                className={classes.radioControl}
+                value="first"
+                control={<Radio />}
+                onChange={onSelectParameter}
+                label="First Name"
+              />
+              <FormControlLabel
+                className={classes.radioControl}
+                value="last"
+                control={<Radio />}
+                onChange={onSelectParameter}
+                label="Last Name"
+              />
+              <FormControlLabel
+                className={classes.radioControl}
+                value="phone"
+                control={<Radio />}
+                onChange={onSelectParameter}
+                label="Phone"
+              />
+              <FormControlLabel
+                className={classes.radioControl}
+                value="guestId"
+                control={<Radio />}
+                onChange={onSelectParameter}
+                label="ID #"
+              />
+            </RadioGroup>
+            <TextBox id="searchbox" placeholder="Enter keyword" onChange={onUpdateText} />
+            <Button className={classes.searchButton} variant="outlined" onClick={searchCustomer}>
+              Search
+            </Button>
+          </FormControl>
+        </Box>
+        {foundGuests && foundGuests.length > 0 && (
+          <Paper>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>First Name</TableCell>
+                  <TableCell>Last Name</TableCell>
+                  <TableCell>Room #</TableCell>
+                  <TableCell>Phone</TableCell>
+                  <TableCell>Address</TableCell>
+                  <TableCell>Check-In</TableCell>
+                  <TableCell>Check-Out</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {foundGuests.map(item => (
+                  <TableRow>
+                    <TableCell>{item.guest.first}</TableCell>
+                    <TableCell>{item.guest.last}</TableCell>
+                    <TableCell>{item.room.roomNumber}</TableCell>
+                    <TableCell>{item.guest.phone}</TableCell>
+                    <TableCell>{`${item.guest.address} ${item.guest.city}, ${item.guest.state} ${item.guest.zip}`}</TableCell>
+                    <TableCell>{item.reservation.checkIn}</TableCell>
+                    <TableCell>{item.reservation.checkOut}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </Paper>
+        )}
+        {foundGuests && foundGuests.length === 0 && (
+          <Box style={{ textAlign: 'center' }}>
+            <Typography color="primary" variant="h5">
+              No guests found
+            </Typography>
+          </Box>
+        )}
       </Box>
-      <Paper>
-      <Table>
-        <TableHead>
-          <TableRow>
-        <TableCell>Guest Info</TableCell>
-        <TableCell>Guest Reservations</TableCell>
-        </TableRow>
-        </TableHead>
-        <TableBody>
-          <TableRow>
-          <TableCell>{results}</TableCell>
-        <TableCell>{reservationsResults}</TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
-      </Paper>
-    </Box>
-    
+    </DetailsPage>
   );
 };
