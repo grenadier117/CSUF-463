@@ -131,7 +131,8 @@ export const Reservations = () => {
                     roomIndex !== -1 && (
                       <TableRow
                         className={clsx(classes.tableRow, {
-                          [classes.inactiveReservation]: !reservation.active,
+                          [classes.inactiveReservation]:
+                            !reservation.active || !isTodayInRange(reservation.checkIn, reservation.checkOut),
                         })}
                         onClick={onNavigate(guestIndex, roomIndex)}
                       >
@@ -150,7 +151,9 @@ export const Reservations = () => {
                           reservation.checkOut,
                         )}`}</TableCell>
                         <TableCell>
-                          <Button color="warning" onClick={onDeleteReservation(reservation)}>Delete</Button>
+                          <Button color="warning" onClick={onDeleteReservation(reservation)}>
+                            Delete
+                          </Button>
                         </TableCell>
                       </TableRow>
                     )
