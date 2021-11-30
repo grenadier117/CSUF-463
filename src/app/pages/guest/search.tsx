@@ -51,9 +51,6 @@ export const Customer = () => {
   const classes = useStyles();
   const [search, setSearch] = useState('');
   const [parameter, setParameter] = useState('first');
-  //const customers = useSelector(selectGuests);
-  const [results, setResults] = useState('');
-  const [reservationsResults, setReservations] = useState('');
   const reservations = useSelector(selectReservations);
   const rooms = useSelector(selectRooms);
   const guests = useSelector(selectGuests);
@@ -62,7 +59,9 @@ export const Customer = () => {
   );
 
   function searchCustomer() {
-    const found = guests.filter(item => `${item[parameter]}`.trim().toLowerCase() === search.trim().toLowerCase());
+    const found = guests.filter(item =>
+      `${item[parameter]}`.trim().toLowerCase().includes(search.trim().toLowerCase()),
+    );
     const results: { guest: IGuest; reservation: IReservation; room: IRoom }[] = [];
     reservations.forEach(reservation => {
       found.forEach(guest => {

@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles } from '@mui/styles';
 import { useHistory } from 'react-router-dom';
 import { FirebaseContext } from 'app/app';
-import { deleteReservation } from 'app/firebase/helpers';
+import { deleteReservation, updateReservation } from 'app/firebase/helpers';
 import { IReservation } from 'app/models/reservation';
 import React from 'react';
 import { AlertDialog } from 'app/components/dialog';
@@ -61,19 +61,24 @@ export const Reservations = () => {
   };
 
   const _deleteReservation = () => {
-    deleteReservation(firestore, reservationToDelete?.reservation?.reservationId || '-1')
-      .then(() => {
-        dispatch(globalActions.setSnackBar({ message: 'Reservation Deleted', severity: 'success' }));
+    if (reservationToDelete?.reservation) {
+      updateReservation(firestore, reservationToDelete?.reservation?.reservationId || '-1', {
+        ...reservationToDelete?.reservation,
+        active: false,
       })
-      .catch(() => {
-        dispatch(
-          globalActions.setSnackBar({
-            message: 'Reservation was unable to be deleted. Please try again.',
-            severity: 'error',
-          }),
-        );
-      });
-    cancelDeleteReservation();
+        .then(() => {
+          dispatch(globalActions.setSnackBar({ message: 'Reservation Deleted', severity: 'success' }));
+        })
+        .catch(() => {
+          dispatch(
+            globalActions.setSnackBar({
+              message: 'Reservation was unable to be deleted. Please try again.',
+              severity: 'error',
+            }),
+          );
+        });
+      cancelDeleteReservation();
+    }
   };
 
   const cancelDeleteReservation = () => {
@@ -123,42 +128,44 @@ export const Reservations = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {reservations.map(reservation => {
-                  const guestIndex = guests.map(g => g.guestId).indexOf(reservation.guestId);
-                  const roomIndex = rooms.map(r => r.roomId).indexOf(reservation.roomId);
-                  return (
-                    guestIndex !== -1 &&
-                    roomIndex !== -1 && (
-                      <TableRow
-                        className={clsx(classes.tableRow, {
-                          [classes.inactiveReservation]:
-                            !reservation.active || !isTodayInRange(reservation.checkIn, reservation.checkOut),
-                        })}
-                        onClick={onNavigate(guestIndex, roomIndex)}
-                      >
-                        <TableCell>{guests[guestIndex].first}</TableCell>
-                        <TableCell>{guests[guestIndex].last}</TableCell>
-                        <TableCell>{reservation.dateMade}</TableCell>
-                        <TableCell>{moment(reservation.checkIn).format('MM/DD/YYYY')}</TableCell>
-                        <TableCell>{moment(reservation.checkOut).format('MM/DD/YYYY')}</TableCell>
-                        <TableCell>{rooms[roomIndex].roomType}</TableCell>
-                        <TableCell>{rooms[roomIndex].roomNumber}</TableCell>
-                        <TableCell>{reservation.website ? 'True' : 'False'}</TableCell>
-                        <TableCell>{`$${rooms[roomIndex].roomRate}`}</TableCell>
-                        <TableCell>{`$${calculateTotalCharge(
-                          rooms[roomIndex].roomRate,
-                          reservation.checkIn,
-                          reservation.checkOut,
-                        )}`}</TableCell>
-                        <TableCell>
-                          <Button color="warning" onClick={onDeleteReservation(reservation)}>
-                            Delete
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    )
-                  );
-                })}
+                {reservations
+                  .filter(item => item.active)
+                  .map(reservation => {
+                    const guestIndex = guests.map(g => g.guestId).indexOf(reservation.guestId);
+                    const roomIndex = rooms.map(r => r.roomId).indexOf(reservation.roomId);
+                    return (
+                      guestIndex !== -1 &&
+                      roomIndex !== -1 && (
+                        <TableRow
+                          className={clsx(classes.tableRow, {
+                            [classes.inactiveReservation]:
+                              !reservation.active || !isTodayInRange(reservation.checkIn, reservation.checkOut),
+                          })}
+                          onClick={onNavigate(guestIndex, roomIndex)}
+                        >
+                          <TableCell>{guests[guestIndex].first}</TableCell>
+                          <TableCell>{guests[guestIndex].last}</TableCell>
+                          <TableCell>{reservation.dateMade}</TableCell>
+                          <TableCell>{moment(reservation.checkIn).format('MM/DD/YYYY')}</TableCell>
+                          <TableCell>{moment(reservation.checkOut).format('MM/DD/YYYY')}</TableCell>
+                          <TableCell>{rooms[roomIndex].roomType}</TableCell>
+                          <TableCell>{rooms[roomIndex].roomNumber}</TableCell>
+                          <TableCell>{reservation.website ? 'True' : 'False'}</TableCell>
+                          <TableCell>{`$${rooms[roomIndex].roomRate}`}</TableCell>
+                          <TableCell>{`$${calculateTotalCharge(
+                            rooms[roomIndex].roomRate,
+                            reservation.checkIn,
+                            reservation.checkOut,
+                          )}`}</TableCell>
+                          <TableCell>
+                            <Button color="warning" onClick={onDeleteReservation(reservation)}>
+                              Delete
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      )
+                    );
+                  })}
               </TableBody>
             </Table>
           </Paper>
