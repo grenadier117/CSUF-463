@@ -25,6 +25,7 @@ import { DetailsPage } from '../layout/detailsPage';
 import { IGuest } from 'app/models/guest';
 import { IReservation } from 'app/models/reservation';
 import { IRoom } from 'app/models/room';
+import { useHistory } from 'react-router';
 
 const useStyles = makeStyles((theme: Theme) => ({
   paper: {
@@ -45,6 +46,12 @@ const useStyles = makeStyles((theme: Theme) => ({
   searchButton: {
     marginTop: '12px !important',
   },
+  tableRow: {
+    '&:hover': {
+      background: theme.palette.mode === 'light' ? '#e6e6e6' : '#595959',
+      cursor: 'pointer',
+    },
+  },
 }));
 
 export const Customer = () => {
@@ -52,6 +59,7 @@ export const Customer = () => {
   const [search, setSearch] = useState('');
   const [parameter, setParameter] = useState('first');
   const reservations = useSelector(selectReservations);
+  const history = useHistory();
   const rooms = useSelector(selectRooms);
   const guests = useSelector(selectGuests);
   const [foundGuests, setFoundGuests] = useState<{ guest: IGuest; reservation: IReservation; room: IRoom }[] | null>(
@@ -143,7 +151,12 @@ export const Customer = () => {
               </TableHead>
               <TableBody>
                 {foundGuests.map(item => (
-                  <TableRow>
+                  <TableRow
+                    className={classes.tableRow}
+                    onClick={() => {
+                      history.push(`/guest/${item.guest.guestId || 0}/profile`);
+                    }}
+                  >
                     <TableCell>{item.guest.first}</TableCell>
                     <TableCell>{item.guest.last}</TableCell>
                     <TableCell>{item.room.roomNumber}</TableCell>
