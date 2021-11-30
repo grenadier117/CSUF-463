@@ -34,3 +34,8 @@ export const calculateBalance = (roomRate: number, checkIn: string, checkOut: st
   const days = daysBetweenDates(checkIn, checkOut);
   return roomRate * (days + 1) - payment;
 };
+
+export const isTodayInRange = (startDate, endDate) => {
+  const today = moment(moment().format('MM/DD/YYYY'));
+  return moment(startDate) <= today && today <= moment(endDate);
+};

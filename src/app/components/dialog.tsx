@@ -6,7 +6,15 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
-export const AlertDialog = ({ open, title, content, handleYes, handleNo }) => {
+interface AlertDialogProps {
+  open: boolean;
+  title: any;
+  content?: any;
+  handleYes: () => void;
+  handleNo: () => void;
+}
+
+export const AlertDialog = ({ open, title, content, handleYes, handleNo }: AlertDialogProps) => {
   return (
     <Dialog
       open={open}
@@ -15,9 +23,11 @@ export const AlertDialog = ({ open, title, content, handleYes, handleNo }) => {
       aria-describedby="alert-dialog-description"
     >
       <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
-      <DialogContent>
-        <DialogContentText id="alert-dialog-description">{content}</DialogContentText>
-      </DialogContent>
+      {content && (
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">{content}</DialogContentText>
+        </DialogContent>
+      )}
       <DialogActions>
         <Button onClick={handleNo}>No</Button>
         <Button onClick={handleYes} autoFocus>

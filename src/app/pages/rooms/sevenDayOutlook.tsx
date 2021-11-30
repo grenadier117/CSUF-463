@@ -46,7 +46,11 @@ export const SevenDayOutlook = () => {
   const isRoomReserved = (roomId, day) => {
     const lookingAtDay = moment(moment(addDays(today, day)).format('MM/DD/YYYY'));
     const foundReservations = reservations.filter(
-      item => item.roomId === roomId && moment(item.checkIn) <= lookingAtDay && lookingAtDay <= moment(item.checkOut),
+      item =>
+        item.roomId === roomId &&
+        item.active &&
+        moment(item.checkIn) <= lookingAtDay &&
+        lookingAtDay <= moment(item.checkOut),
     );
     if (foundReservations.length > 0) {
       const reservation = foundReservations[0];

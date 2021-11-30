@@ -29,7 +29,7 @@ import moment from 'moment';
 import { DetailsPage } from '../layout/detailsPage';
 import { useHistory } from 'react-router';
 import { calculateBalance, calculateTotalCharge } from 'app/helpers/helpers';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectGuests, selectReservations, selectRooms } from 'app/redux/hotel.selector';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
@@ -38,6 +38,7 @@ import { IRoom } from 'app/models/room';
 import { addGuest, addReservation, makeDocHash, updateReservation, updateRoom } from 'app/firebase/helpers';
 import { FirebaseContext } from 'app/app';
 import AddIcon from '@mui/icons-material/Add';
+import { globalActions } from 'app/global/global.redux';
 
 const useStyles = makeStyles((theme: Theme) => ({
   label: {
@@ -54,8 +55,10 @@ const useStyles = makeStyles((theme: Theme) => ({
     cursor: 'pointer',
   },
   addGuestItem: {
-    height: '20px', width: '20px', marginTop: '5px'
-  }
+    height: '20px',
+    width: '20px',
+    marginTop: '5px',
+  },
 }));
 
 export const CurrentStay = () => {
@@ -71,6 +74,7 @@ export const CurrentStay = () => {
   const guestList = useSelector(selectGuests);
   const { guestId, roomId, reservationId } = useParams<any>();
   const { firestore } = React.useContext(FirebaseContext);
+  const dispatch = useDispatch();
 
   React.useEffect(() => {
     // get the room details
@@ -145,6 +149,13 @@ export const CurrentStay = () => {
       updateReservation(firestore, reservation.reservationId, {
         ...reservation,
         active: false,
+      }).then(() => {
+        dispatch(
+          globalActions.setSnackBar({
+            message: 'Reservation updated, guest has been checked-out',
+            severity: 'success',
+          }),
+        );
       });
       if (room) {
         updateRoom(firestore, roomId, {
@@ -152,9 +163,14 @@ export const CurrentStay = () => {
           clean: false,
         });
       }
-    } else updateReservation(firestore, reservation.reservationId, reservation);
-    // history.push(`/roomList`);
-    history.goBack();
+    } else {
+      updateReservation(firestore, reservation.reservationId, {
+        ...reservation,
+        active: true,
+      }).then(() => {
+        dispatch(globalActions.setSnackBar({ message: 'Reservation updated', severity: 'success' }));
+      });
+    }
   };
 
   const _addReservation = () => {
@@ -165,8 +181,8 @@ export const CurrentStay = () => {
       roomId: roomId,
       website: true,
     }).then(() => {
-      // history.push('/reservations');
-      history.goBack();
+      dispatch(globalActions.setSnackBar({ message: 'Reservation added', severity: 'success' }));
+      history.push('/reservations');
     });
   };
 
@@ -306,8 +322,8 @@ export const CurrentStay = () => {
                   />
                 </TableCell>
                 <TableCell>
-                  {reservation.active == true ? (
-                    <Button onClick={_updateReservation}>Update</Button>
+                  {reservation.reservationId ? (
+                    <Button onClick={_updateReservation}>{reservation.active ? 'Update' : 'Reactivate'}</Button>
                   ) : (
                     <Button onClick={_addReservation}>Save</Button>
                   )}
