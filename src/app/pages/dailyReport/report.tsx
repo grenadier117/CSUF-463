@@ -1,19 +1,20 @@
 /** Andy Lopez */
 
-import { Paper, Table, TableHead, TableRow, TableCell, Typography, TableBody, Box } from '@mui/material';
+import { Paper, Table, TableHead, TableRow, TableCell, Typography, TableBody, Box, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React from 'react';
 import moment from 'moment';
 import { DetailsPage } from '../layout/detailsPage';
-import { addDays } from 'date-fns';
-import { useHistory } from 'react-router';
-import { selectGuests, selectReservations } from 'app/redux/hotel.selector';
 import { useSelector } from 'react-redux';
+import { selectGuests, selectReservations, selectRooms } from 'app/redux/hotel.selector';
+import { isTodayInRange } from 'app/helpers/helpers';
+import { IRoom } from 'app/models/room';
+import { IGuest } from 'app/models/guest';
 
 /**
  * Create styles for this component
  */
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme: Theme) => ({
   room: {
     padding: '12px 24px',
   },
@@ -25,42 +26,19 @@ const useStyles = makeStyles({
     textDecoration: 'underline',
     cursor: 'pointer',
   },
-  h1: {
-    color: 'white',
+  paymentContainer: {
+    textAlign: 'end',
+    padding: '10px 0px',
   },
-});
+  payment: {
+    color: theme.palette.text.primary,
+  },
+}));
 
 export const DailyReport = () => {
-  const [today] = React.useState<Date>(new Date());
-  const history = useHistory();
   const reservations = useSelector(selectReservations);
+  const rooms = useSelector(selectRooms);
   const guests = useSelector(selectGuests);
-  /**
-   * use the custom hook for styles to be able to use them in this component
-   * Each style class compiles to a string value that is used with className
-   */
-
-  const isRoomReserved = (roomId, day) => {
-    const lookingAtDay = moment(moment(addDays(today, day)).format('MM/DD/YYYY'));
-    const foundReservations = reservations.filter(
-      item => item.roomId === roomId && moment(item.checkIn) <= lookingAtDay && lookingAtDay <= moment(item.checkOut),
-    );
-    if (foundReservations.length > 0) {
-      const reservation = foundReservations[0];
-      const guestIndex = guests.map(guest => guest.guestId).indexOf(reservation.guestId);
-      if (guestIndex !== undefined && guestIndex !== -1) {
-        const guest = guests[guestIndex];
-        return { name: `${guest.first} ${guest.last}`, guestId: guest.guestId };
-      }
-    }
-    return { name: '', guestId: -1 };
-  };
-
-  const navigate = guestId => event => {
-    if (guestId !== -1) history.push(`/guest/${guestId}/currentstay`);
-  };
-
-  const days = [0, 1, 2, 3, 4, 5, 6];
 
   const classes = useStyles();
   return (
@@ -68,53 +46,48 @@ export const DailyReport = () => {
      * This list is wrapped in a paper component for visual purposes */
     <DetailsPage title="Today's Summary">
       <Paper className={classes.paper}>
+        <div style={{ padding: '12px 12px' }}>
+          <Typography variant="h5">{`${moment().format('MM/DD/YYYY')}`}</Typography>
+        </div>
+
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Room Number</TableCell>
+              <TableCell>Room #</TableCell>
               <TableCell>Guest Name</TableCell>
-              <TableCell>Date In/Out</TableCell>
+              <TableCell>Check-In</TableCell>
+              <TableCell>Check-Out</TableCell>
               <TableCell>Amount Paid</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            <TableRow>
-              <TableCell>5</TableCell>
-              <TableCell>Andy L</TableCell>
-              <TableCell>10/22 | 10/23</TableCell>
-              <TableCell>$124.35</TableCell>
-            </TableRow>
-
-            <TableRow>
-              <TableCell>8</TableCell>
-              <TableCell>Bob</TableCell>
-              <TableCell>10/22 | 10/23</TableCell>
-              <TableCell>$724.35</TableCell>
-            </TableRow>
-
-            <TableRow>
-              <TableCell>8</TableCell>
-              <TableCell>Bob</TableCell>
-              <TableCell>10/22 | 10/23</TableCell>
-              <TableCell>$724.35</TableCell>
-            </TableRow>
-
-            <TableRow>
-              <TableCell>8</TableCell>
-              <TableCell>Bob</TableCell>
-              <TableCell>10/22 | 10/23</TableCell>
-              <TableCell>$724.35</TableCell>
-            </TableRow>
-
-            <TableRow>
-              <TableCell></TableCell>
-              <TableCell></TableCell>
-              <TableCell></TableCell>
-              <TableCell>Daily Total: $1020</TableCell>
-            </TableRow>
+            {reservations
+              .filter(item => isTodayInRange(item.checkIn, item.checkOut) && item.active)
+              .map(reservation => {
+                const room: IRoom | undefined = rooms.find(r => r.roomId === reservation.roomId);
+                const guest: IGuest | undefined = guests.find(g => g.guestId === reservation.guestId);
+                return (
+                  <TableRow>
+                    <TableCell>{room?.roomNumber}</TableCell>
+                    <TableCell>{`${guest?.first || ''} ${guest?.last || ''}`}</TableCell>
+                    <TableCell>{reservation.checkIn}</TableCell>
+                    <TableCell>{reservation.checkOut}</TableCell>
+                    <TableCell>{`$${reservation.payment}`}</TableCell>
+                  </TableRow>
+                );
+              })}
           </TableBody>
         </Table>
       </Paper>
+      <Box className={classes.paymentContainer}>
+        <Typography variant="h6" className={classes.payment}>
+          {`Total Payments Made: $${reservations
+            .filter(item => item.active)
+            .reduce((total, item) => {
+              return (total += item.payment || 0);
+            }, 0)}`}
+        </Typography>
+      </Box>
     </DetailsPage>
   );
 };
