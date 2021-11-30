@@ -46,11 +46,9 @@ const useStyles = makeStyles((theme: Theme) => ({
   searchButton: {
     marginTop: '12px !important',
   },
-  tableRow: {
-    '&:hover': {
-      background: theme.palette.mode === 'light' ? '#e6e6e6' : '#595959',
-      cursor: 'pointer',
-    },
+  tableRowClickable: {
+    textDecoration: 'underline',
+    cursor: 'pointer',
   },
 }));
 
@@ -140,8 +138,7 @@ export const Customer = () => {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>First Name</TableCell>
-                  <TableCell>Last Name</TableCell>
+                  <TableCell>Guest Name</TableCell>
                   <TableCell>Room #</TableCell>
                   <TableCell>Phone</TableCell>
                   <TableCell>Address</TableCell>
@@ -151,14 +148,13 @@ export const Customer = () => {
               </TableHead>
               <TableBody>
                 {foundGuests.map(item => (
-                  <TableRow
-                    className={classes.tableRow}
-                    onClick={() => {
-                      history.push(`/guest/${item.guest.guestId || 0}/profile`);
-                    }}
-                  >
-                    <TableCell>{item.guest.first}</TableCell>
-                    <TableCell>{item.guest.last}</TableCell>
+                  <TableRow>
+                    <TableCell
+                      className={classes.tableRowClickable}
+                      onClick={() => {
+                        history.push(`/guest/${item.guest.guestId || 0}/profile`);
+                      }}
+                    >{`${item.guest.first} ${item.guest.last}`}</TableCell>
                     <TableCell>{item.room.roomNumber}</TableCell>
                     <TableCell>{item.guest.phone}</TableCell>
                     <TableCell>{`${item.guest.address} ${item.guest.city}, ${item.guest.state} ${item.guest.zip}`}</TableCell>
