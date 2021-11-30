@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     padding: '10px 0px',
   },
   payment: {
-    color: theme.palette.text.primary,
+    color: theme.palette.text.secondary,
   },
 }));
 
