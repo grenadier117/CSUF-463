@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     justifyContent: 'center',
   },
   radioControl: {
-    color: theme.palette.text.primary,
+    color: theme.palette.text.secondary,
   },
   searchButton: {
     marginTop: '12px !important',
